@@ -1,5 +1,7 @@
 package com.ssafy.home.Heo.house.service;
 
+import com.ssafy.home.Heo.common.base.BaseResponseStatus;
+import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import com.ssafy.home.Heo.house.repository.HouseDao;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public HouseDetailResponseDto findHouseByAptSeq(String aptSeq) throws SQLException {
-        return dao.findHouseByAptSeq(aptSeq);
+        HouseDetailResponseDto res =dao.findHouseByAptSeq(aptSeq);
+        if(res == null) throw new BaseException(BaseResponseStatus.NO_EXIST_HOUSE);
+        return res;
     }
 }

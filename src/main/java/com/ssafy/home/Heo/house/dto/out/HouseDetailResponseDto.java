@@ -3,7 +3,6 @@ package com.ssafy.home.Heo.house.dto.out;
 import lombok.*;
 
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +11,7 @@ public class HouseDetailResponseDto {
     private String aptSeq; // 아파트코드
     private String sggCd; // 시군구코드
     private String umdCd; // 읍면동코드
-    private String umd_Nm; // 읍면동이름
+    private String umdNm; // 읍면동이름
     private String jibun; // 지번
     private String roadNmSggCd; // 도로명시군구코드
     private String roadNm; // 도로명
