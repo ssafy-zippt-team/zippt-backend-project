@@ -1,4 +1,6 @@
 package com.ssafy.home.Heo.common.base;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -51,24 +53,10 @@ public enum BaseResponseStatus {
     SAME_NICKNAME(HttpStatus.CONFLICT, false, 409, "현재 사용중인 닉네임입니다."),
     INVALID_EMAIL_ADDRESS(HttpStatus.BAD_REQUEST, false, 400, "이메일을 다시 확인해주세요."),
 
-    // Category
-    NO_EXIST_CATEGORY(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 카테고리입니다."),
-    DUPLICATED_CATEGORY_NAME(HttpStatus.CONFLICT, false, 409, "이미 존재하는 카테고리 이름입니다."),
-
-    // Interest (could be Global not found?)
-    NO_EXIST_INTEREST(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 관심사입니다."),
+    // House
+    NO_EXIST_HOUSE(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 집 입니다"),
 
 
-    // Shorts
-    NO_EXIST_PRODUCT(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 상품입니다"),
-    NO_EXIST_OPTION(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 옵션입니다"),
-
-    // Comment
-    NO_EXIST_COMMENT(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 댓글입니다"),
-    NO_DELETE_COMMENT_AUTHORITY(HttpStatus.BAD_REQUEST, false, 403, "댓글 삭제 권한이 없습니다"),
-    NO_DELETE_RE_COMMENT_AUTHORITY(HttpStatus.BAD_REQUEST, false, 403, "대댓글 삭제 권한이 없습니다"),
-    NO_EXIST_RE_COMMENT(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 대댓글입니다"),
-    NO_EXIST_PIN_AUTHORITY(HttpStatus.BAD_REQUEST, false, 403, "고정 권한이 없습니다"),
 
     // Notification
     NO_EXIST_NOTIFICATION_SETTING(HttpStatus.NOT_FOUND, false, 404, "유저의 알림 설정이 존재하지 않습니다."),
@@ -80,6 +68,5 @@ public enum BaseResponseStatus {
     private final boolean isSuccess;
     private final int code;
     private final String message;
-
 
 }
