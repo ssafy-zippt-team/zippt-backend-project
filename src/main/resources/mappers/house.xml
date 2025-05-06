@@ -24,6 +24,25 @@
 		FROM houseinfos
 		WHERE apt_seq = #{aptSeq}
 	</select>
+
+	<select id="getHouseListCount" resultType="int">
+		SELECT COUNT(*) FROM houseinfos
+	</select>
+	<select id="getHouseList"
+			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseResponseDto">
+
+		SELECT
+		apt_seq AS aptSeq,
+		umd_nm AS umdNm,
+		jibun,
+		apt_nm AS aptNm,
+		build_year AS buildYear
+		FROM houseinfos
+		ORDER BY build_year DESC
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+
 	
 
 	
