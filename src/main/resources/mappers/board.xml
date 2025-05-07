@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.board.repository.BoardDao">
+
+
+	<select id="getBoardListCount" resultType="int">
+		SELECT COUNT(*) FROM boards
+	</select>
+
+	<!--
+		전체 조회
+	-->
+	<select id="getBoardList"
+			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
+			resultType="com.ssafy.home.Heo.board.dto.out.BoardResponseDto">
+
+		select
+		 	  A.board_id   AS boardId
+		     ,A.title
+			 ,A.member_id  AS memberId
+			 ,B.name 	   AS memberName
+			 ,A.created_at AS createdAt
+			 ,A.updated_at AS updatedAt
+		FROM  boards AS A
+		LEFT OUTER JOIN member AS B ON A.member_id = B.member_id
+		ORDER BY updated_at DESC
+		LIMIT #{size} OFFSET #{offset};
+
+	</select>
+
+	<!--
+		상세 조회
+	-->
+	<select id="findBoardByboardId" parameterType="String"   resultType="com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto">
+		select
+		 A.board_id   AS boardId
+		,A.title
+		,A.content
+		,A.member_id  AS memberId
+		,B.name 	  AS memberName
+		,A.created_at AS createdAt
+		,A.updated_at AS updatedAt
+		FROM  boards  AS A
+		LEFT OUTER JOIN member AS B ON A.member_id = B.member_id
+		WHERE A.board_id = #{boardId}
+	</select>
+
+</mapper>
