@@ -6,6 +6,7 @@ import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
+import com.ssafy.home.Heo.house.entity.HouseEntity;
 import com.ssafy.home.Heo.house.repository.HouseDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,22 +26,23 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public HouseDetailResponseDto findHouseByAptSeq(String aptSeq) throws SQLException {
-        HouseDetailResponseDto res = dao.findHouseByAptSeq(aptSeq);
-        if(res == null) throw new BaseException(BaseResponseStatus.NO_EXIST_HOUSE);
-        return res;
+        HouseEntity entity = dao.findHouseByAptSeq(aptSeq);
+        if(entity == null) throw new BaseException(BaseResponseStatus.NO_EXIST_HOUSE);
+        return HouseDetailResponseDto.from(entity);
     }
 
     @Override
     public PageResponseDto<HouseResponseDto> getHouseList(PageRequestDto pageRequestDto) throws SQLException {
         // 1. 목록 조회
-        List<HouseResponseDto> list = dao.getHouseList(pageRequestDto);
-
+        List<HouseEntity> list = dao.getHouseList(pageRequestDto);
+        if(list.isEmpty()) throw new BaseException(BaseResponseStatus.NO_EXIST_HOUSE); // 결과 없으면 에러 메시지
         // 2. 전체 개수 조회
         int totalCount = dao.getHouseListCount();
-        log.info("total = "+totalCount);
         // 3. 응답 조립
         return PageResponseDto.<HouseResponseDto> withAll()
-                .dtoList(list)
+                .dtoList(list.stream()
+                        .map(HouseResponseDto::from)
+                        .collect(Collectors.toList()))
                 .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDto)
                 .build();

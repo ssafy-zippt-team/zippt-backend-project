@@ -1,5 +1,6 @@
 package com.ssafy.home.Heo.house.dto.out;
 
+import com.ssafy.home.Heo.house.entity.HouseEntity;
 import com.ssafy.home.Heo.house.vo.out.HouseDetailResponseVo;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class HouseDetailResponseDto {
     private float latitude; // 위도
     private float longitude; // 경도
 
+    // dto -> vo
     public static HouseDetailResponseVo from (HouseDetailResponseDto dto){
         return HouseDetailResponseVo.builder()
                 .aptSeq(dto.getAptSeq())
@@ -39,5 +41,25 @@ public class HouseDetailResponseDto {
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .build();
+    }
+
+    // entity -> dto
+    public static HouseDetailResponseDto from (HouseEntity entity) {
+        return HouseDetailResponseDto.builder()
+                .aptSeq(entity.getAptSeq())
+                .sggCd(entity.getSggCd())
+                .umdCd(entity.getUmdCd())
+                .umdNm(entity.getUmdNm())
+                .jibun(entity.getJibun())
+                .roadNmSggCd(entity.getRoadNmSggCd())
+                .roadNm(entity.getRoadNm())
+                .roadNmBonbun(entity.getRoadNmBonbun())
+                .roadNmBubun(entity.getRoadNmBubun())
+                .aptNm(entity.getAptNm())
+                .buildYear(entity.getBuildYear())
+                .latitude(entity.getLatitude())
+                .longitude(entity.getLongitude())
+                .build();
+
     }
 }

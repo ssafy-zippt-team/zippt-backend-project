@@ -11,6 +11,7 @@ import com.ssafy.home.Heo.house.vo.out.HouseDetailResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ import java.sql.SQLException;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/house")
+@RequestMapping("/api/v1/houses")
 public class HouseController {
     private final HouseService service;
 
@@ -41,7 +42,7 @@ public class HouseController {
         );
     }
     @GetMapping("/list")
-    public PageResponseDto<HouseResponseDto> list(PageRequestDto pageRequestDto) throws SQLException {
+    public PageResponseDto<HouseResponseDto> list(@ParameterObject PageRequestDto pageRequestDto) throws SQLException {
         return service.getHouseList(pageRequestDto);
     }
 
