@@ -1,16 +1,9 @@
 package com.ssafy.home.Heo.bookmark.controller;
 
-import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
-import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
-import com.ssafy.home.Heo.board.entity.Board;
-import com.ssafy.home.Heo.board.service.BoardService;
-import com.ssafy.home.Heo.board.vo.out.BoardDetailResponseVo;
 import com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto;
-import com.ssafy.home.Heo.bookmark.entity.Bookmark;
+import com.ssafy.home.Heo.bookmark.entity.BookmarkEntity;
 import com.ssafy.home.Heo.bookmark.service.BookmarkService;
-import com.ssafy.home.Heo.common.base.BaseResponse;
-import com.ssafy.home.Heo.common.page.PageRequestDto;
-import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.bookmark.vo.in.BookmarkSaveVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,7 +17,7 @@ import java.util.List;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/bookmark")
+@RequestMapping("/api/v1/bookmarks")
 public class BookMarkController {
     private final BookmarkService service;
     /*==============================================================
@@ -43,9 +36,9 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 저장", description = "즐겨찾기 저장", tags = {"bookmark"})
     @PostMapping("/save")
-    public ResponseEntity<Void> insert(@ParameterObject Bookmark bookmark) throws SQLException {
-        System.out.println("Insert 객체 받아오기 bookmark = " + bookmark);
-        service.insert(bookmark);
+    public ResponseEntity<Void> insert(@ParameterObject BookmarkSaveVo bookmarksavevo) throws SQLException {
+        System.out.println("Insert 객체 받아오기 bookmark = " + bookmarksavevo);
+        service.insert(bookmarksavevo.from(bookmarksavevo));
         return ResponseEntity.ok().build();
     }
     /*==============================================================
@@ -55,7 +48,7 @@ public class BookMarkController {
         즐겨찾기 삭제
     ==============================================================*/
     @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 삭제", tags = {"bookmark"})
-    @PostMapping("/delete/{bookmarkId}")
+    @DeleteMapping("/{bookmarkId}")
     public ResponseEntity<Void> delete(@PathVariable(name = "bookmarkId")String bookmarkId) throws SQLException {
         System.out.println("bookmarkId = " + bookmarkId);
         service.delete(bookmarkId);

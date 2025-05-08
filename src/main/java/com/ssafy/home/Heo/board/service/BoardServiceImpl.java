@@ -1,15 +1,16 @@
 package com.ssafy.home.Heo.board.service;
 
+import com.ssafy.home.Heo.board.dto.in.BoardSaveDto;
+import com.ssafy.home.Heo.board.dto.in.BoardUpdateDto;
 import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
 import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
-import com.ssafy.home.Heo.board.entity.Board;
+import com.ssafy.home.Heo.board.entity.BoardEntity;
 import com.ssafy.home.Heo.board.repository.BoardDao;
+import com.ssafy.home.Heo.board.vo.out.BoardResponseVo;
 import com.ssafy.home.Heo.common.base.BaseResponseStatus;
 import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
-import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
-import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -62,8 +63,8 @@ public class BoardServiceImpl implements BoardService {
         공지사항 등록
     ==============================================================*/
     @Override
-    public int insert(Board board) throws SQLException {
-        int cnt = dao.insert(board);
+    public int insert(BoardSaveDto boardsavedto) throws SQLException {
+        int cnt = dao.insert(BoardSaveDto.from(boardsavedto));
         System.out.println("조회된 행 = " + cnt);
 //        일단 보류
 //        if (cnt == 0) throw new BaseException(BaseResponseStatus.NO_EXIST_BOARD);
@@ -86,8 +87,8 @@ public class BoardServiceImpl implements BoardService {
         공지사항 업데이트
     ==============================================================*/
     @Override
-    public void update(Board board) throws SQLException {
-        dao.update(board);
+    public void update(BoardUpdateDto boardupdatedto) throws SQLException {
+        dao.update(BoardUpdateDto.from(boardupdatedto));
     }
     /*==============================================================
         공지사항 업데이트 END

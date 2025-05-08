@@ -28,7 +28,7 @@
 	<!--
 		저장
 	-->
-	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.Bookmark">
+	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.BookmarkEntity">
 		INSERT INTO bookmarks (member_id,apt_Seq, created_at, updated_at)
 		VALUES (#{memberId}, #{aptSeq}, NOW(), NOW())
 	</insert>

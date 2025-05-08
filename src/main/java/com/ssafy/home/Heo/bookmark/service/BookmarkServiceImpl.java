@@ -1,17 +1,9 @@
 package com.ssafy.home.Heo.bookmark.service;
 
-import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
-import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
-import com.ssafy.home.Heo.board.entity.Board;
-import com.ssafy.home.Heo.board.repository.BoardDao;
-import com.ssafy.home.Heo.board.service.BoardService;
+import com.ssafy.home.Heo.bookmark.dto.in.BookmarkSaveDto;
 import com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto;
-import com.ssafy.home.Heo.bookmark.entity.Bookmark;
+import com.ssafy.home.Heo.bookmark.entity.BookmarkEntity;
 import com.ssafy.home.Heo.bookmark.repository.BookmarkDao;
-import com.ssafy.home.Heo.common.base.BaseResponseStatus;
-import com.ssafy.home.Heo.common.exception.BaseException;
-import com.ssafy.home.Heo.common.page.PageRequestDto;
-import com.ssafy.home.Heo.common.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,8 +32,8 @@ public class BookmarkServiceImpl implements BookmarkService {
       즐겨찾기 등록
     ==============================================================*/
     @Override
-    public void insert(Bookmark bookmark) throws SQLException {
-        dao.insert(bookmark);
+    public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException {
+        dao.insert(BookmarkSaveDto.from(bookmarkSaveDto));
     }
     /*==============================================================
        즐겨찾기 등록 END

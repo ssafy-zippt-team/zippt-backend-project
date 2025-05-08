@@ -2,14 +2,15 @@ package com.ssafy.home.Heo.board.controller;
 
 import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
 import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
-import com.ssafy.home.Heo.board.entity.Board;
+import com.ssafy.home.Heo.board.entity.BoardEntity;
 import com.ssafy.home.Heo.board.service.BoardService;
+import com.ssafy.home.Heo.board.vo.in.BoardSaveVo;
+import com.ssafy.home.Heo.board.vo.in.BoardUpdateVo;
 import com.ssafy.home.Heo.board.vo.out.BoardDetailResponseVo;
+import com.ssafy.home.Heo.board.vo.out.BoardResponseVo;
 import com.ssafy.home.Heo.common.base.BaseResponse;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
-import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
-import com.ssafy.home.Heo.house.vo.out.HouseDetailResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,7 +23,7 @@ import java.sql.SQLException;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/board")
+@RequestMapping("/api/v1/boards")
 public class BoardController {
     private final BoardService service;
     /*==============================================================
@@ -54,9 +55,9 @@ public class BoardController {
     ==============================================================*/
     @Operation(summary = "공지사항 저장", description = "공지사항 저장", tags = {"board"})
     @PostMapping("/save")
-    public ResponseEntity<Void> insert(@ParameterObject Board board) throws SQLException {
-        System.out.println("Insert 객체 받아오기 board = " + board);
-        int cnt = service.insert(board);
+    public ResponseEntity<Void> insert(@ParameterObject BoardSaveVo boardsavevo) throws SQLException {
+        System.out.println("Insert 객체 받아오기 boardsavevo = " + boardsavevo);
+        int cnt = service.insert(BoardSaveVo.from(boardsavevo));
         return ResponseEntity.ok().build();
     }
     /*==============================================================
@@ -66,7 +67,7 @@ public class BoardController {
         공지사항 삭제
     ==============================================================*/
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제", tags = {"board"})
-    @PostMapping("/delete/{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> delete(@PathVariable(name = "boardId")String boardId) throws SQLException {
         System.out.println("boardId = " + boardId);
         service.delete(boardId);
@@ -79,10 +80,10 @@ public class BoardController {
         공지사항 수정
     ==============================================================*/
     @Operation(summary = "공지사항 수정", description = "공지사항 수정", tags = {"board"})
-    @PostMapping("/update")
-    public ResponseEntity<Void> update(@ParameterObject Board board) throws SQLException {
-        System.out.println("객체 받아오기 board = " + board);
-        service.update(board);
+    @PatchMapping("/update")
+    public ResponseEntity<Void> update(@ParameterObject BoardUpdateVo boardupdatevo) throws SQLException {
+        System.out.println("객체 받아오기 boardupdatevo = " + boardupdatevo);
+        service.update(BoardUpdateVo.from(boardupdatevo));
         return ResponseEntity.ok().build();
     }
     /*==============================================================

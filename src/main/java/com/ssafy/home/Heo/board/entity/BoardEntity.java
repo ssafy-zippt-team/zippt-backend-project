@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Board {
+public class BoardEntity {
     private int boardId;                            // 공지사항 코드
     private String title;                           // 제목
     private String content;                         // 내용

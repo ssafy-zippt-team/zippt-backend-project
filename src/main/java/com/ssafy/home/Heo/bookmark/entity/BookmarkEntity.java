@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Bookmark {
+public class BookmarkEntity {
     private int bookmarkId;                            // 즐겨찾기 코드
     private int memberId;                              // 사용자 코드
     private String memberName;                         // 사용자 이름
