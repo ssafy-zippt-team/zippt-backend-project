@@ -47,4 +47,31 @@
 		WHERE A.board_id = #{boardId}
 	</select>
 
+	<!--
+		저장
+	-->
+	<insert id="insert" parameterType="com.ssafy.home.Heo.board.entity.Board">
+		INSERT INTO boards (title, content, member_id, created_at, updated_at, views)
+		VALUES (#{title}, #{content}, #{memberId}, NOW(), NOW(), 0)
+	</insert>
+
+	<!--
+		삭제
+	-->
+	<delete id="delete" parameterType="String">
+		DELETE FROM boards WHERE board_id = #{boardId}
+	</delete>
+
+	<!--
+		수정
+	-->
+	<update id="update" parameterType="com.ssafy.home.Heo.board.entity.Board">
+		UPDATE boards
+		SET title = #{title},
+			content = #{content},
+			updated_at = NOW()
+		WHERE board_id = #{boardId}
+	</update>
+
+
 </mapper>
