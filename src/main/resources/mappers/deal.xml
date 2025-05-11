@@ -26,13 +26,13 @@
 		WHERE hi.sgg_cd = #{sggCd}
 		AND hi.umd_cd = #{umdCd}
 		<choose>
-			<when test="orderCondition == 'OLDEST'">
+			<when test="orderCondition != null and orderCondition.name() == 'OLDEST'">
 				ORDER BY hd.deal_year ASC, hd.deal_month ASC, hd.deal_day ASC
 			</when>
-			<when test="orderCondition == 'PRICE_ASC'">
+			<when test="orderCondition != null and orderCondition.name() == 'PRICE_ASC'">
 				ORDER BY hd.deal_amount ASC
 			</when>
-			<when test="orderCondition == 'PRICE_DESC'">
+			<when test="orderCondition != null and orderCondition.name() == 'PRICE_DESC'">
 				ORDER BY hd.deal_amount DESC
 			</when>
 			<otherwise>
