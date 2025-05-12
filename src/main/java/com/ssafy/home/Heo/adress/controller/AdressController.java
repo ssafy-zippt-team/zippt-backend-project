@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/boards")
+@RequestMapping("/api/v1/adresses")
 public class AdressController {
     private final AdressService service;
 
