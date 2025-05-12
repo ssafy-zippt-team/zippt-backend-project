@@ -1,5 +1,6 @@
 package com.ssafy.home.Heo.house.entity;
 
+import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import lombok.*;
 
 @Getter
@@ -7,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class House {
+public class HouseEntity {
     private String aptSeq; // 아파트코드
     private String sggCd; // 시군구코드
     private String umdCd; // 읍면동코드
@@ -21,4 +22,6 @@ public class House {
     private int buildYear; // 준공년도
     private float latitude; // 위도
     private float longitude; // 경도
+
+
 }

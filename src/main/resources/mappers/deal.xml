@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.deal.reposiitory.DealDao">
+
+	<select id="getDealCount"
+			parameterType="com.ssafy.home.Heo.deal.condition.SearchCondition"
+			resultType="int">
+		SELECT count(*)
+		FROM housedeals hd
+		JOIN houseinfos hi ON hd.apt_seq = hi.apt_seq
+		WHERE hi.sgg_cd = #{sggCd}
+		AND hi.umd_cd = #{umdCd}
+	</select>
+	<select id="findDealsByCondition"
+			parameterType="com.ssafy.home.Heo.deal.condition.SearchCondition"
+			resultType="com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto">
+		SELECT
+		CONCAT(hd.deal_year, '-', LPAD(hd.deal_month, 2, '0'), '-', LPAD(hd.deal_day, 2, '0')) AS deal_date,
+		CONCAT(hd.floor, '층') AS floor,
+		CONCAT(hd.exclu_use_ar, '(㎡)') AS exclu_use_ar,
+		FORMAT(hd.deal_amount, 0) AS deal_amount
+		FROM housedeals hd
+		JOIN houseinfos hi ON hd.apt_seq = hi.apt_seq
+		WHERE hi.sgg_cd = #{sggCd}
+		AND hi.umd_cd = #{umdCd}
+		<choose>
+			<when test="orderCondition != null and orderCondition.name() == 'OLDEST'">
+				ORDER BY hd.deal_year ASC, hd.deal_month ASC, hd.deal_day ASC
+			</when>
+			<when test="orderCondition != null and orderCondition.name() == 'PRICE_ASC'">
+				ORDER BY hd.deal_amount ASC
+			</when>
+			<when test="orderCondition != null and orderCondition.name() == 'PRICE_DESC'">
+				ORDER BY hd.deal_amount DESC
+			</when>
+			<otherwise>
+				ORDER BY hd.deal_year DESC, hd.deal_month DESC, hd.deal_day DESC
+			</otherwise>
+		</choose>
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+
+
+	
+</mapper>
