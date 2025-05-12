@@ -34,5 +34,10 @@ public class DealServiceImpl implements DealService{
                 .build();
     }
 
+    @Override
+    public List<DealInfoResponseDto> findTopTenLatestDeals(String aptSeq) throws SQLException {
+        return dao.findTopTenLatestDeals(aptSeq);
+    }
+
 
 }
