@@ -4,6 +4,8 @@ import com.ssafy.home.Heo.common.base.BaseResponseStatus;
 import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
+import com.ssafy.home.Heo.house.condition.SearchCondition;
 import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
 import com.ssafy.home.Heo.house.entity.HouseEntity;
@@ -45,6 +47,17 @@ public class HouseServiceImpl implements HouseService {
                         .collect(Collectors.toList()))
                 .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDto)
+                .build();
+    }
+
+    @Override
+    public PageResponseDto<HouseResponseDto> findHousesByCondition(SearchCondition searchCondition) throws SQLException {
+        List <HouseEntity> list = dao.findHousesByCondition(searchCondition);
+        int totalCount = dao.getHouseCountByCondition(searchCondition);
+        return PageResponseDto.<HouseResponseDto> withAll()
+                .dtoList(list.stream().map(HouseResponseDto::from).collect(Collectors.toList()))
+                .totalCount(totalCount)
+                .pageRequestDTO(searchCondition)
                 .build();
     }
 }
