@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.adress.repository.AdressDao">
+
+
+    <select id="getCityList"
+            resultType="com.ssafy.home.Heo.adress.entity.AdressEntity">
+        select  0 			   		AS adressSeq
+        ,MAX(LEFT(dong_code,2)) AS citySeq
+        ,0    					AS guSeq
+        ,0    					AS dongSeq
+        ,sido_name 			    AS cityName
+        ,'' 				    AS guName
+        ,''  					AS dongName
+        FROM dongcodes
+        WHERE LEFT(dong_code,2) != 0
+        GROUP BY sido_name;
+    </select>
+
+    <select id="getGuList"
+            parameterType="String"
+            resultType="com.ssafy.home.Heo.adress.entity.AdressEntity">
+        SELECT
+         0 			                   AS adressSeq
+        ,MAX(LEFT(dong_code,2))        AS citySeq
+        ,MAX(SUBSTRING(dong_code,3,3)) AS guSeq
+        ,0                             AS dongSeq
+        ,sido_name 			           AS cityName
+        ,ifnull(gugun_name,'')         AS guName
+        ,''  AS dongName
+        FROM dongcodes
+        WHERE LEFT(dong_code,2) = #{citySeq}
+        AND SUBSTRING(dong_code,3,3) != 0
+        GROUP BY sido_name, gugun_name;
+    </select>
+
+    <select id="getDongList"
+            resultType="com.ssafy.home.Heo.adress.entity.AdressEntity">
+        SELECT
+          dong_code 			   AS adressSeq
+         ,LEFT(dong_code,2)     AS citySeq
+         ,SUBSTRING(dong_code,3,3) AS guSeq
+         ,RIGHT(dong_code,5)    AS dongSeq
+         ,sido_name 			   AS cityName
+         ,ifnull(gugun_name,'') AS guName
+         ,ifnull(dong_name,'')  AS dongName
+        FROM dongcodes
+        WHERE LEFT(dong_code,2)        = #{citySeq}
+        AND   SUBSTRING(dong_code,3,3) = #{guSeq}
+        AND   RIGHT(dong_code,5) != 0
+    </select>
+
+</mapper>
