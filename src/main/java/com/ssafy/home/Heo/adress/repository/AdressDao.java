@@ -17,6 +17,9 @@ import java.util.List;
 public interface AdressDao {
 
     // 시 조회
-    List<AdressEntity> getCityList(String citySeq) throws SQLException;
-
+    List<AdressEntity> getCityList() throws SQLException;
+    // 구 조회
+    List<AdressEntity> getGuList(String citySeq) throws SQLException;
+    // 동 조회
+    List<AdressEntity> getDongList(String citySeq, String guSeq) throws SQLException;
 }

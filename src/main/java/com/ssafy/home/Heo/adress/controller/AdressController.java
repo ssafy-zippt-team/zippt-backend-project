@@ -29,20 +29,51 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/boards")
 public class AdressController {
     private final AdressService service;
+
     /*==============================================================
-        시 목록 조회
+        시 조회
     ==============================================================*/
-    @Operation(summary = "시 목록 조회", description = "시 목록 조회", tags = {"adress"})
-    @GetMapping("/citylist/{citySeq}")
-    public BaseResponse<List<AdressResponseVo>> list(@PathVariable(name = "citySeq")String cityseq ) throws SQLException {
-        return BaseResponse.of (service.getCityList(cityseq).stream()
+    @Operation(summary = "시 조회", description = "시 조회", tags = {"adress"})
+    @GetMapping("/getCitylist")
+    public BaseResponse<List<AdressResponseVo>> getCitylist() throws SQLException {
+        List<AdressResponseVo> list = service.getCityList().stream()
                 .map(AdressResponseDto::from) // 변환
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return BaseResponse.of(list);
     }
     /*==============================================================
-        시 목록 조회 END
+        시 조회 END
     ==============================================================*/
-
+    /*==============================================================
+        구 조회
+    ==============================================================*/
+    @Operation(summary = "구 목록 조회", description = "구 목록 조회", tags = {"adress"})
+    @GetMapping("/getGulist/{citySeq}")
+    public BaseResponse<List<AdressResponseVo>> getGulist( @PathVariable(name = "citySeq") String citySeq) throws SQLException {
+        List<AdressResponseVo> list = service.getGuList(citySeq).stream()
+                .map(AdressResponseDto::from) // 변환
+                .collect(Collectors.toList());
+        return BaseResponse.of(list);
+    }
+    /*==============================================================
+        구 조회 END
+    ==============================================================*/
+    /*==============================================================
+        동 조회
+    ==============================================================*/
+    @Operation(summary = "동 목록 조회", description = "동 목록 조회", tags = {"adress"})
+    @GetMapping("/getDonglist/{citySeq}/{guSeq}")
+    public BaseResponse<List<AdressResponseVo>> getDonglist( @PathVariable(name = "citySeq") String citySeq
+                                                            ,@PathVariable(name = "guSeq") String guSeq
+                                                            ) throws SQLException {
+        List<AdressResponseVo> list = service.getDongList(citySeq, guSeq).stream()
+                .map(AdressResponseDto::from) // 변환
+                .collect(Collectors.toList());
+        return BaseResponse.of(list);
+    }
+    /*==============================================================
+        동 조회 END
+    ==============================================================*/
 
 
 }

@@ -30,14 +30,11 @@ import java.util.stream.Collectors;
 public class AdressServiceImpl implements AdressService {
     private final AdressDao dao;
     /*==============================================================
-        공지사항 전체 조회
+        시 조회
     ==============================================================*/
     @Override
-    public List<AdressResponseDto> getCityList(String citySeq) throws SQLException {
-        // 1. 목록 조회
-        List<AdressEntity> list = dao.getCityList(citySeq);
-
-
+    public List<AdressResponseDto> getCityList() throws SQLException {
+        List<AdressEntity> list = dao.getCityList();
         return list.stream()
                 .map(entity -> AdressResponseDto.builder()
                         .adressSeq(entity.getAdressSeq())
@@ -49,10 +46,51 @@ public class AdressServiceImpl implements AdressService {
                         .dongName(entity.getDongName())
                         .build())
                 .collect(Collectors.toList());
+    }
 
+    /*==============================================================
+      시 조회 END
+    ==============================================================*/
+    /*==============================================================
+        구 조회
+    ==============================================================*/
+    @Override
+    public List<AdressResponseDto> getGuList(String citySeq) throws SQLException {
+        List<AdressEntity> list = dao.getGuList(citySeq);
+        return list.stream()
+                .map(entity -> AdressResponseDto.builder()
+                        .adressSeq(entity.getAdressSeq())
+                        .citySeq(entity.getCitySeq())
+                        .guSeq(entity.getGuSeq())
+                        .dongSeq(entity.getDongSeq())
+                        .cityName(entity.getCityName())
+                        .guName(entity.getGuName())
+                        .dongName(entity.getDongName())
+                        .build())
+                .collect(Collectors.toList());
     }
     /*==============================================================
-      공지사항 전체 조회 END
+      구 조회 END
     ==============================================================*/
-
+    /*==============================================================
+        동 조회
+    ==============================================================*/
+    @Override
+    public List<AdressResponseDto> getDongList(String citySeq, String guSeq) throws SQLException {
+        List<AdressEntity> list = dao.getDongList(citySeq,guSeq);
+        return list.stream()
+                .map(entity -> AdressResponseDto.builder()
+                        .adressSeq(entity.getAdressSeq())
+                        .citySeq(entity.getCitySeq())
+                        .guSeq(entity.getGuSeq())
+                        .dongSeq(entity.getDongSeq())
+                        .cityName(entity.getCityName())
+                        .guName(entity.getGuName())
+                        .dongName(entity.getDongName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+    /*==============================================================
+      동 조회 END
+    ==============================================================*/
 }

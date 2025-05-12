@@ -20,16 +20,4 @@ public class AdressResponseVo {
     private String guName;                           // 구
     private String dongName;                         // 동
 
-    public static AdressResponseDto from (AdressEntity entity){
-        return AdressResponseDto.builder()
-                .adressSeq(entity.getAdressSeq())
-                .citySeq(entity.getCitySeq())
-                .guSeq(entity.getGuSeq())
-                .dongSeq(entity.getDongSeq())
-                .cityName(entity.getCityName())
-                .guName(entity.getGuName())
-                .dongName(entity.getDongName())
-                .build();
-    }
-
 }
