@@ -22,8 +22,8 @@ public class BookmarkServiceImpl implements BookmarkService {
        즐겨찾기 조회
     ==============================================================*/
     @Override
-    public List<BookmarkResponseDto> getBookmarkList(String memberId) throws SQLException {
-        return dao.getBookmarkList(memberId);
+    public List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException {
+        return dao.getBookmarkList(memberUuid);
     }
     /*==============================================================
       즐겨찾기 조회 END
@@ -42,8 +42,8 @@ public class BookmarkServiceImpl implements BookmarkService {
         즐겨찾기 삭제
     ==============================================================*/
     @Override
-    public void delete(String boardId) throws SQLException {
-        dao.delete(boardId);
+    public void delete(String bookmarkId) throws SQLException {
+        dao.delete(bookmarkId);
     }
     /*==============================================================
         즐겨찾기 삭제 END

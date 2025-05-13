@@ -1,19 +1,9 @@
-package com.ssafy.home.Heo.adress.service;
+package com.ssafy.home.Heo.address.service;
 
-import com.ssafy.home.Heo.adress.dto.out.AdressResponseDto;
-import com.ssafy.home.Heo.adress.entity.AdressEntity;
-import com.ssafy.home.Heo.adress.repository.AdressDao;
-import com.ssafy.home.Heo.board.dto.in.BoardSaveDto;
-import com.ssafy.home.Heo.board.dto.in.BoardUpdateDto;
-import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
-import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
-import com.ssafy.home.Heo.board.repository.BoardDao;
-import com.ssafy.home.Heo.board.service.BoardService;
-import com.ssafy.home.Heo.common.base.BaseResponse;
-import com.ssafy.home.Heo.common.base.BaseResponseStatus;
-import com.ssafy.home.Heo.common.exception.BaseException;
-import com.ssafy.home.Heo.common.page.PageRequestDto;
-import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.address.dto.out.AddressResponseDto;
+import com.ssafy.home.Heo.address.entity.AddressEntity;
+import com.ssafy.home.Heo.address.repository.AddressDao;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,16 +17,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class AdressServiceImpl implements AdressService {
-    private final AdressDao dao;
+public class AddressServiceImpl implements AddressService {
+    private final AddressDao dao;
+
+//    @Parameter(description = "공지사항 ID", example = "1")
+
     /*==============================================================
         시 조회
     ==============================================================*/
     @Override
-    public List<AdressResponseDto> getCityList() throws SQLException {
-        List<AdressEntity> list = dao.getCityList();
+    public List<AddressResponseDto> getCityList() throws SQLException {
+        List<AddressEntity> list = dao.getCityList();
         return list.stream()
-                .map(entity -> AdressResponseDto.builder()
+                .map(entity -> AddressResponseDto.builder()
                         .adressSeq(entity.getAdressSeq())
                         .citySeq(entity.getCitySeq())
                         .guSeq(entity.getGuSeq())
@@ -55,10 +48,10 @@ public class AdressServiceImpl implements AdressService {
         구 조회
     ==============================================================*/
     @Override
-    public List<AdressResponseDto> getGuList(String citySeq) throws SQLException {
-        List<AdressEntity> list = dao.getGuList(citySeq);
+    public List<AddressResponseDto> getGuList(String citySeq) throws SQLException {
+        List<AddressEntity> list = dao.getGuList(citySeq);
         return list.stream()
-                .map(entity -> AdressResponseDto.builder()
+                .map(entity -> AddressResponseDto.builder()
                         .adressSeq(entity.getAdressSeq())
                         .citySeq(entity.getCitySeq())
                         .guSeq(entity.getGuSeq())
@@ -76,10 +69,10 @@ public class AdressServiceImpl implements AdressService {
         동 조회
     ==============================================================*/
     @Override
-    public List<AdressResponseDto> getDongList(String citySeq, String guSeq) throws SQLException {
-        List<AdressEntity> list = dao.getDongList(citySeq,guSeq);
+    public List<AddressResponseDto> getDongList(String citySeq, String guSeq) throws SQLException {
+        List<AddressEntity> list = dao.getDongList(citySeq,guSeq);
         return list.stream()
-                .map(entity -> AdressResponseDto.builder()
+                .map(entity -> AddressResponseDto.builder()
                         .adressSeq(entity.getAdressSeq())
                         .citySeq(entity.getCitySeq())
                         .guSeq(entity.getGuSeq())

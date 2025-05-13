@@ -12,16 +12,16 @@
 			resultType="com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto">
 		select
 		 	  A.bookmark_id   AS bookmarkId
-			 ,A.member_id  AS memberId
+			 ,A.member_uuid  AS memberUuid
 			 ,B.name 	   AS memberName
 			 ,A.apt_Seq    AS aptSeq
 			 ,C.apt_nm     AS aptName
 			 ,A.created_at AS createdAt
 			 ,A.updated_at AS updatedAt
 		FROM  bookmarks AS A
-		LEFT OUTER JOIN member AS B ON A.member_id = B.member_id
-		LEFT OUTER JOIN houseinfos AS C ON A.apt_Seq = C.apt_seq
-		WHERE A.member_id = #{memberId}
+		LEFT OUTER JOIN member AS B ON A.member_uuid = B.member_uuid
+		LEFT OUTER JOIN houseinfos AS C ON A.apt_seq = C.apt_seq
+		WHERE A.member_uuid = #{memberUuid}
 		ORDER BY A.updated_at DESC
 
 	</select>
@@ -29,8 +29,8 @@
 		저장
 	-->
 	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.BookmarkEntity">
-		INSERT INTO bookmarks (member_id,apt_Seq, created_at, updated_at)
-		VALUES (#{memberId}, #{aptSeq}, NOW(), NOW())
+		INSERT INTO bookmarks (member_uuid,apt_Seq, created_at, updated_at)
+		VALUES (#{memberUuid}, #{aptSeq}, NOW(), NOW())
 	</insert>
 
 	<!--
