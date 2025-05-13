@@ -19,7 +19,8 @@
 			apt_nm,
 			build_year,
 			latitude,
-			longitude
+			longitude,
+			img_url
 		FROM houseinfos
 		WHERE apt_seq = #{aptSeq}
 	</select>
@@ -42,7 +43,8 @@
 			apt_nm,
 			build_year,
 			latitude,
-			longitude
+			longitude,
+			img_url
 		FROM houseinfos
 		ORDER BY build_year DESC
 		LIMIT #{size} OFFSET #{offset}
@@ -76,7 +78,8 @@
 			apt_nm,
 			build_year,
 			latitude,
-			longitude
+			longitude,
+			 img_url
 		FROM houseinfos hi
 		WHERE hi.sgg_cd = #{sggCd}
 		<if test="umdCd != null and umdCd != ''">
@@ -92,5 +95,44 @@
 		</choose>
 		LIMIT #{size} OFFSET #{offset}
 	</select>
-	
+
+
+	<select id="findAllHousesByDong"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto">
+		SELECT apt_seq,latitude, longitude
+		FROM houseinfos
+		WHERE sgg_cd = #{sggCd}
+		AND umd_cd = #{umdCd}
+	</select>
+
+	<select id="findAllHouseDealAvgByAptSeqList"
+			parameterType="list"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseDealAmountInfoResponseDto">
+		SELECT
+			apt_seq,
+			ROUND(AVG(deal_amount) / 10000.0, 2) AS amount_Avg,
+			ROUND(MAX(deal_amount) / 10000.0, 2) AS amountMax,
+			ROUND(MIN(deal_amount) / 10000.0, 2) AS amountMin
+		FROM housedeals
+		WHERE apt_seq IN
+		<foreach item="aptSeq" collection="list" open="(" separator="," close=")">
+			#{aptSeq}
+		</foreach>
+		GROUP BY apt_seq
+	</select>
+
+	<select id="findAllBookmarkCountByAptSeqList"
+			parameterType="list"
+			resultType="com.ssafy.home.Heo.house.dto.out.BookmarkCountDto">
+		SELECT
+		apt_seq,
+		COUNT(*) AS count
+		FROM bookmarks
+		WHERE apt_seq IN
+		<foreach item="aptSeq" collection="list" open="(" separator="," close=")">
+			#{aptSeq}
+		</foreach>
+		GROUP BY apt_seq
+	</select>
+
 </mapper>
