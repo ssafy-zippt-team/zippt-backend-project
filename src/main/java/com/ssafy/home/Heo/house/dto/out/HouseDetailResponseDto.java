@@ -23,6 +23,7 @@ public class HouseDetailResponseDto {
     private int buildYear; // 준공년도
     private float latitude; // 위도
     private float longitude; // 경도
+    private String imgUrl;
 
     // dto -> vo
     public static HouseDetailResponseVo from (HouseDetailResponseDto dto){
@@ -40,6 +41,7 @@ public class HouseDetailResponseDto {
                 .buildYear(dto.getBuildYear())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
+                .imgUrl(dto.getImgUrl())
                 .build();
     }
 
@@ -59,6 +61,7 @@ public class HouseDetailResponseDto {
                 .buildYear(entity.getBuildYear())
                 .latitude(entity.getLatitude())
                 .longitude(entity.getLongitude())
+                .imgUrl(entity.getImgUrl())
                 .build();
 
     }
