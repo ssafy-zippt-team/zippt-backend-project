@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookmarkDao {
 
     // 즐겨찾기 조회
-    List<BookmarkResponseDto> getBookmarkList(String memberId) throws SQLException;
+    List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException;
     // 즐겨찾기 등록
     void insert(BookmarkEntity bookmarkentity) throws SQLException;
     // 즐겨찾기 삭제

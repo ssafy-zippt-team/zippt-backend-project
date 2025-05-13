@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BookmarkEntity {
     private int bookmarkId;                            // 즐겨찾기 코드
-    private int memberId;                              // 사용자 코드
+    private String memberUuid;                              // 사용자 코드
     private String memberName;                         // 사용자 이름
     private String aptSeq;                                // 아파트 코드
     private String aptName;                            // 아파트 이름
