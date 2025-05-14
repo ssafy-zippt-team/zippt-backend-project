@@ -40,5 +40,20 @@
 		DELETE FROM bookmarks WHERE bookmark_id = #{bookmarkId}
 	</delete>
 
+	<!--
+            즐겨찾기 여부 조회
+	-->
+	<select id="checkBoolMark"
+			parameterType="map"
+			resultType="boolean">
+		SELECT CASE
+				WHEN EXISTS (
+					SELECT 1
+					FROM bookmarks AS bm
+					WHERE bm.apt_seq = #{aptSeq}
+					AND bm.member_uuid = #{memberUuid}
+				) THEN TRUE
+				ELSE FALSE END
+	</select>
 
 </mapper>

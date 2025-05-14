@@ -45,7 +45,7 @@
 
 	<!--최근 거래내역 조회-->
 	<select id="findTopTenLatestDeals"
-			parameterType="java.lang.String"
+			parameterType="map"
 			resultType="com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto">
 		SELECT
 			CONCAT(hd.deal_year, '-', LPAD(hd.deal_month, 2, '0'), '-', LPAD(hd.deal_day, 2, '0')) AS deal_date,
@@ -55,7 +55,7 @@
 			FROM housedeals hd
 		WHERE hd.apt_seq = #{aptSeq}
 		ORDER BY hd.deal_year desc, hd.deal_month desc, hd.deal_day desc
-		LIMIT 10
+		LIMIT #{limit}
 	</select>
 
 	

@@ -4,6 +4,7 @@ import com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto;
 import com.ssafy.home.Heo.bookmark.entity.BookmarkEntity;
 import com.ssafy.home.Heo.bookmark.service.BookmarkService;
 import com.ssafy.home.Heo.bookmark.vo.in.BookmarkSaveVo;
+import com.ssafy.home.Heo.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class BookMarkController {
         즐겨찾기 저장
     ==============================================================*/
     @Operation(summary = "즐겨찾기 저장", description = "즐겨찾기 저장", tags = {"즐겨찾기"})
-    @PostMapping("/save")
+    @PostMapping("/")
     public ResponseEntity<Void> insert(@ParameterObject BookmarkSaveVo bookmarksavevo) throws SQLException {
         System.out.println("Insert 객체 받아오기 bookmark = " + bookmarksavevo);
         service.insert(bookmarksavevo.from(bookmarksavevo));
@@ -62,6 +63,29 @@ public class BookMarkController {
     }
     /*==============================================================
         즐겨찾기 삭제 END
+    ==============================================================*/
+
+
+   /*==============================================================
+        멤버의 아파트 즐겨찾기 여부 조회 START
+    ==============================================================*/
+   @Operation(summary = "즐겨찾기 여부 확인", description = "aptSeq, memberUuid로 매물 즐겨찾기 여부 확인", tags = {"즐겨찾기"})
+   @GetMapping("/check")
+   public BaseResponse<Boolean> checkBoolMark(
+           @Parameter(description = "aptSeq", example = "11110-100", required = true)
+           @ParameterObject String aptSeq,
+
+           @Parameter(description = "memberUuid", example = "9ed7aacf-2b04-11f0-a5b7-0242ac110002", required = true)
+           @ParameterObject String memberUuid
+
+   ) throws SQLException {
+
+       return BaseResponse.of(
+               service.checkBoolMark(aptSeq,memberUuid)
+       );
+   }
+    /*==============================================================
+        멤버의 아파트 즐겨찾기 여부 조회 END
     ==============================================================*/
 
 
