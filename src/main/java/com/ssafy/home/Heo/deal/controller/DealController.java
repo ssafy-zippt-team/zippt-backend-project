@@ -60,7 +60,7 @@ public class DealController {
     public BaseResponse<List<DealInfoResponseVo>>findTopTenLatestDeals(
             @Parameter(description = "아파트 식별자", example = "11110-2224")
             @ParameterObject String aptSeq,
-            @Parameter(description = "볼 거래내역의 수 (입력 안할 시 10개 조회)", example = "1")
+            @Parameter(description = "조회 할 거래내역의 수 (입력 안할 시 10개 조회)", example = "1")
             @RequestParam(required = false) Integer limit
     ) throws SQLException {
         return  BaseResponse.of(
