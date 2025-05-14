@@ -13,5 +13,5 @@ public interface DealService {
     PageResponseDto<DealInfoResponseDto> findDealsByCondition(SearchCondition searchCondition) throws SQLException;
 
     // aptSeq로 최신 거래내역 10건 조회
-    List<DealInfoResponseDto> findTopTenLatestDeals (String aptSeq) throws  SQLException;
+    List<DealInfoResponseDto> findTopTenLatestDeals (String aptSeq, Integer limit) throws  SQLException;
 }

@@ -14,4 +14,7 @@ public interface BookmarkService {
     public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException;
     //즐겨찾기 삭제
     public void delete(String bookmarkId) throws SQLException;
+
+    // 즐겨찾기 여부 확인
+    public boolean checkBoolMark(String aptSeq, String memberUuid) throws SQLException;
 }

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class HouseServiceImpl implements HouseService {
     private final HouseDao dao;
+    private final RedisHouseService redisHouseService;
 
     @Override
     public HouseDetailResponseDto findHouseByAptSeq(String aptSeq) throws SQLException {
@@ -60,40 +61,79 @@ public class HouseServiceImpl implements HouseService {
                 .build();
     }
 
-    @Override
-    public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException {
-        // 1. 아파트 기본 정보 조회
-        List<HouseMarkerResponseDto> list = dao.findAllHousesByDong(sggCd, umdCd);
 
-        // 2. aptSeq 리스트 추출
-        List<String> aptSeqList = list.stream()
+@Override
+public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException {
+    String redisKey = "house:" + sggCd + "-" + umdCd;
+
+    // 1. Redis 캐시 조회
+    LookAroundCacheDto cacheDto = redisHouseService.getHouseCache(sggCd, umdCd);
+    if (cacheDto != null) {
+        log.info("###Redis 캐시 hit: {}", redisKey);
+
+        // 북마크는 항상 DB에서 조회
+        List<String> aptSeqList = cacheDto.getHouseList().stream()
                 .map(HouseMarkerResponseDto::getAptSeq)
                 .toList();
-
-        // 3. aptSeq 리스트로 평균, 최고, 최저 거래 금액 조회
-        List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
-        Map<String, HouseDealAmountInfoResponseDto> dealMap = dealList.stream()
-                .collect(Collectors.toMap(HouseDealAmountInfoResponseDto::getAptSeq, dto -> dto));
-
-        // 4. aptSeq 리스트로 북마크 수 조회
         List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
         Map<String, Integer> bookmarkMap = bookmarkList.stream()
                 .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
 
-        // 5. 원본 list에 모든 정보 반영 (조립)
-        list.forEach(dto -> {
-            // 거래 금액 정보 업데이트
-            HouseDealAmountInfoResponseDto deal = dealMap.get(dto.getAptSeq());
+        // 데이터 조립
+        cacheDto.getHouseList().forEach(dto -> {
+            HouseDealAmountInfoResponseDto deal = cacheDto.getDealList().stream()
+                    .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                    .findFirst()
+                    .orElse(null);
             if (deal != null) {
                 dto.setAmountAvg(deal.getAmountAvg());
                 dto.setAmountMax(deal.getAmountMax());
                 dto.setAmountMin(deal.getAmountMin());
             }
-            // 즐겨찾기 수 업데이트 
             Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
             dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
         });
 
-        return list;
+        return cacheDto.getHouseList();
+    }
+
+    // 2. 캐시가 없으면 DB 조회
+    List<HouseMarkerResponseDto> list = dao.findAllHousesByDong(sggCd, umdCd);
+    List<String> aptSeqList = list.stream()
+            .map(HouseMarkerResponseDto::getAptSeq)
+            .toList();
+    List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
+    List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
+    Map<String, Integer> bookmarkMap = bookmarkList.stream()
+            .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
+
+    // 데이터 조립
+    list.forEach(dto -> {
+        HouseDealAmountInfoResponseDto deal = dealList.stream()
+                .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                .findFirst()
+                .orElse(null);
+        if (deal != null) {
+            dto.setAmountAvg(deal.getAmountAvg());
+            dto.setAmountMax(deal.getAmountMax());
+            dto.setAmountMin(deal.getAmountMin());
+        }
+        Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
+        dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
+    });
+
+    // 3. Redis 캐싱
+    LookAroundCacheDto newCacheDto = LookAroundCacheDto.builder()
+            .houseList(list)
+            .dealList(dealList)
+            .build();
+    boolean isCached = redisHouseService.setHouseCache(sggCd, umdCd, newCacheDto);
+    if (isCached) {
+        log.info("###Redis 캐싱 성공: {}", redisKey);
+    } else {
+        log.info("##Redis 캐싱 실패로 DB 데이터만 반환: {}", redisKey);
+    }
+
+    return list;
     }
 }

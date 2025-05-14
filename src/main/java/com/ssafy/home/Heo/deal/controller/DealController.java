@@ -16,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
@@ -53,14 +54,17 @@ public class DealController {
     /**
      *  최신 거래내역 리스트
      */
-    @Operation(summary = "거래내역 리스트 조회",
+    @Operation(summary = "최신 거래내역 리스트 조회",
             description = "apt_seq로 해당 아파트의 최신 10개까지의 거래내역 조회", tags = {"거래내역"})
     @GetMapping("/latest-list")
     public BaseResponse<List<DealInfoResponseVo>>findTopTenLatestDeals(
             @Parameter(description = "아파트 식별자", example = "11110-2224")
-            @ParameterObject String aptSeq) throws SQLException {
+            @ParameterObject String aptSeq,
+            @Parameter(description = "조회 할 거래내역의 수 (입력 안할 시 10개 조회)", example = "1")
+            @RequestParam(required = false) Integer limit
+    ) throws SQLException {
         return  BaseResponse.of(
-                dealService.findTopTenLatestDeals(aptSeq)
+                dealService.findTopTenLatestDeals(aptSeq,limit)
                         .stream().map(DealInfoResponseDto::from).collect(Collectors.toList())
         );
     }

@@ -45,6 +45,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     public void delete(String bookmarkId) throws SQLException {
         dao.delete(bookmarkId);
     }
+
+    @Override
+    public boolean checkBoolMark(String aptSeq, String memberUuid) throws SQLException {
+        return dao.checkBoolMark( aptSeq, memberUuid);
+    }
     /*==============================================================
         즐겨찾기 삭제 END
     ==============================================================*/
