@@ -20,26 +20,25 @@ public class RedisHouseServiceImpl implements RedisHouseService {
     private final RedisTemplate<String, LookAroundCacheDto> lookAroundRedisTemplate;
 
     @Override
-    public LookAroundCacheDto getLookAroundCache(String sggCd, String umdCd) {
+    public LookAroundCacheDto getHouseCache(String sggCd, String umdCd) {
         String key = "lookaround:" + sggCd + "-" + umdCd;
         try {
             return lookAroundRedisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            //log.warn("❌ Redis 캐시 조회 실패: {}", e.getMessage());
-            log.warn("❌ Redis 캐시 조회 실패 → key: {}", key, e);
+            log.error(" Redis 캐시 조회 실패: {}", e.getMessage());
 
             return null;
         }
     }
 
     @Override
-    public boolean  setLookAroundCache(String sggCd, String umdCd, LookAroundCacheDto dto) {
+    public boolean  setHouseCache(String sggCd, String umdCd, LookAroundCacheDto dto) {
         String key = "lookaround:" + sggCd + "-" + umdCd;
         try {
             lookAroundRedisTemplate.opsForValue().set(key, dto);
             return true;
         } catch (Exception e) {
-            log.warn("❌ Redis 캐시 저장 실패: {}", e.getMessage());
+            log.error("Redis 캐시 저장 실패: {}", e.getMessage());
             return false;
         }
     }

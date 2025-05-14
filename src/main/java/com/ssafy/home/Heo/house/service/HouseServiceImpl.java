@@ -67,9 +67,9 @@ public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umd
     String redisKey = "house:" + sggCd + "-" + umdCd;
 
     // 1. Redis 캐시 조회
-    LookAroundCacheDto cacheDto = redisHouseService.getLookAroundCache(sggCd, umdCd);
+    LookAroundCacheDto cacheDto = redisHouseService.getHouseCache(sggCd, umdCd);
     if (cacheDto != null) {
-        log.info("Redis 캐시 hit: {}", redisKey);
+        log.info("###Redis 캐시 hit: {}", redisKey);
 
         // 북마크는 항상 DB에서 조회
         List<String> aptSeqList = cacheDto.getHouseList().stream()
@@ -127,11 +127,11 @@ public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umd
             .houseList(list)
             .dealList(dealList)
             .build();
-    boolean isCached = redisHouseService.setLookAroundCache(sggCd, umdCd, newCacheDto);
+    boolean isCached = redisHouseService.setHouseCache(sggCd, umdCd, newCacheDto);
     if (isCached) {
-        log.info("✅ Redis 캐싱 성공: {}", redisKey);
+        log.info("###Redis 캐싱 성공: {}", redisKey);
     } else {
-        log.info("⚠️ Redis 캐싱 실패로 DB 데이터만 반환: {}", redisKey);
+        log.info("##Redis 캐싱 실패로 DB 데이터만 반환: {}", redisKey);
     }
 
     return list;
