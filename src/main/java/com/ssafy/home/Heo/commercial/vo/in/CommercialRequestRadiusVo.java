@@ -4,10 +4,13 @@ package com.ssafy.home.Heo.commercial.vo.in;
 import com.ssafy.home.Heo.bookmark.dto.in.BookmarkSaveDto;
 import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestRadiusDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Builder
 public class CommercialRequestRadiusVo {
     @Schema(description = "중심점 경도", example = "37.5775989043871")

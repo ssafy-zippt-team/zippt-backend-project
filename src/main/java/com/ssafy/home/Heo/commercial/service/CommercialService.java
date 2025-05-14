@@ -1,11 +1,16 @@
 package com.ssafy.home.Heo.commercial.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseRadiusDto;
 import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestRadiusVo;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public interface CommercialService {
 
-    public List<CommercialRequestRadiusVo> getCommercialInRadius(CommercialRequestRadiusDto dto);
+    public List<CommercialResponseRadiusDto> getCommercialInRadius(CommercialRequestRadiusDto dto) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException;
+
 }
