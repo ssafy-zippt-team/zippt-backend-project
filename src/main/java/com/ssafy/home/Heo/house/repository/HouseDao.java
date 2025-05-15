@@ -35,5 +35,9 @@ public interface HouseDao {
     List<HouseDealAmountInfoResponseDto> findAllHouseDealAvgByAptSeqList(List<String> aptSeqList) throws  SQLException;
     List<BookmarkCountDto> findAllBookmarkCountByAptSeqList(List<String> aptSeqList) throws  SQLException;
 
+    List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat,
+                                                         double maxLat,
+                                                         double minLng,
+                                                         double maxLng);
 
 }

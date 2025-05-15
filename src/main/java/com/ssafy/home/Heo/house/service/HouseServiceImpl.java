@@ -144,4 +144,9 @@ public class HouseServiceImpl implements HouseService {
 
         return list;
     }
+
+    @Override
+    public List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat, double minLng, double maxLng) {
+        return dao.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
+    }
 }

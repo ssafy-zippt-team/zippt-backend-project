@@ -84,6 +84,26 @@ public class HouseController {
                         .collect(Collectors.toList())
         );
     }
+    @Operation(summary = "좌표(위도경도)로 아파트 리스트 조회",
+            description = "해당 좌표 범위에 든 아파트 정보 리턴", tags = {"house"})
+    @GetMapping("/around")
+    public BaseResponse<List<HouseMarkerResponseVo>> findHousesByLatLngRange(
+            @Parameter(description = "위도 최소값", example = "37.5207")
+            @RequestParam double minLat,
+            @Parameter(description = "위도 최대값", example = "37.5483")
+            @RequestParam double maxLat,
+            @Parameter(description = "경도 최소값", example = "126.9536")
+            @RequestParam double minLng,
+            @Parameter(description = "경도 최대값", example = "127.0099")
+            @RequestParam double maxLng) {
 
+        List<HouseMarkerResponseDto> dtoList = service.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
+
+        return BaseResponse.of(
+                dtoList.stream()
+                        .map(HouseMarkerResponseDto::from)
+                        .collect(Collectors.toList())
+        );
+    }
 
 }

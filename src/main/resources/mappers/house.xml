@@ -125,14 +125,28 @@
 			parameterType="list"
 			resultType="com.ssafy.home.Heo.house.dto.out.BookmarkCountDto">
 		SELECT
-		apt_seq,
-		COUNT(*) AS count
-		FROM bookmarks
-		WHERE apt_seq IN
+				apt_seq,
+				COUNT(*) AS count
+		FROM 	bookmarks
+		WHERE 	active_flag = 'Y'
+		AND 	apt_seq IN
 		<foreach item="aptSeq" collection="list" open="(" separator="," close=")">
 			#{aptSeq}
 		</foreach>
 		GROUP BY apt_seq
 	</select>
+
+	<select id="findHousesByLatLngRange"
+			parameterType="map"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto">
+		SELECT
+			apt_seq,
+			latitude,
+			longitude
+		FROM houseinfos
+		WHERE latitude BETWEEN #{minLat} AND #{maxLat}
+		AND longitude BETWEEN #{minLng} AND #{maxLng}
+	</select>
+
 
 </mapper>
