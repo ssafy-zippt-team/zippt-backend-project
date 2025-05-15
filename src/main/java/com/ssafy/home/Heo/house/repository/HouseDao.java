@@ -38,6 +38,7 @@ public interface HouseDao {
     List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat,
                                                          double maxLat,
                                                          double minLng,
-                                                         double maxLng);
+                                                         double maxLng) throws SQLException;
+    //;
 
 }

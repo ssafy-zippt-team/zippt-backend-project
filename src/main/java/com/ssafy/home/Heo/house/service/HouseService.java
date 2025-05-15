@@ -20,6 +20,6 @@ public interface HouseService{
     List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException;
 
     List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat,
-                                                         double minLng, double maxLng);
+                                                         double minLng, double maxLng)  throws SQLException;
 
 }

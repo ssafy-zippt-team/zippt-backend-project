@@ -146,7 +146,34 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat, double minLng, double maxLng) {
-        return dao.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
+    public List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat, double minLng, double maxLng) throws SQLException {
+        List<HouseMarkerResponseDto> list = dao.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
+        List<String> aptSeqList = list.stream()
+                .map(HouseMarkerResponseDto::getAptSeq)
+                .toList();
+        if (!aptSeqList.isEmpty()) {
+            List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
+            List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
+            Map<String, Integer> bookmarkMap = bookmarkList.stream()
+                    .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
+
+            // 데이터 조립
+            list.forEach(dto -> {
+                HouseDealAmountInfoResponseDto deal = dealList.stream()
+                        .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                        .findFirst()
+                        .orElse(null);
+                if (deal != null) {
+                    dto.setAmountAvg(deal.getAmountAvg());
+                    dto.setAmountMax(deal.getAmountMax());
+                    dto.setAmountMin(deal.getAmountMin());
+                }
+                Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
+                dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
+            });
+        }
+        return list;
     }
+
 }
+
