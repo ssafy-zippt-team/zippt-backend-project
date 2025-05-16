@@ -95,7 +95,7 @@ public class HouseController {
             @Parameter(description = "경도 최소값", example = "126.9536")
             @RequestParam double minLng,
             @Parameter(description = "경도 최대값", example = "127.0099")
-            @RequestParam double maxLng) {
+            @RequestParam double maxLng)   throws SQLException {
 
         List<HouseMarkerResponseDto> dtoList = service.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
 
