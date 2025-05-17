@@ -1,10 +1,6 @@
 package com.ssafy.home.Heo.commercial.dto.out;
 
 
-import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestRadiusDto;
-import com.ssafy.home.Heo.commercial.entity.CommercialEntity;
-import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestRadiusVo;
-import com.ssafy.home.Heo.commercial.vo.out.CommercialResponseRadiusVo;
 import lombok.*;
 
 @Getter
@@ -28,18 +24,18 @@ public class CommercialResponseRadiusDto {
     private String coords;       // 좌표값 문자열
     private String stdrDt;       // 기준일자
 
-    public static CommercialResponseRadiusVo from(CommercialResponseRadiusDto dto){
-        return CommercialResponseRadiusVo.builder()
-                .mainTrarNm(dto.getMainTrarNm())
-                .ctprvnCd(dto.getCtprvnCd())
-                .ctprvnNm(dto.getCtprvnNm())
-                .signguCd(dto.getSignguCd())
-                .signguNm(dto.getSignguNm())
-                .trarArea(dto.getTrarArea())
-                .coordNum(dto.getCoordNum())
-                .coords(dto.getCoords())
-                .stdrDt(dto.getStdrDt())
-                .build();
-    }
+//    public static CommercialResponseRadiusVo from(CommercialResponseRadiusDto dto){
+//        return CommercialResponseRadiusVo.builder()
+//                .mainTrarNm(dto.getMainTrarNm())
+//                .ctprvnCd(dto.getCtprvnCd())
+//                .ctprvnNm(dto.getCtprvnNm())
+//                .signguCd(dto.getSignguCd())
+//                .signguNm(dto.getSignguNm())
+//                .trarArea(dto.getTrarArea())
+//                .coordNum(dto.getCoordNum())
+//                .coords(dto.getCoords())
+//                .stdrDt(dto.getStdrDt())
+//                .build();
+//    }
 
 }

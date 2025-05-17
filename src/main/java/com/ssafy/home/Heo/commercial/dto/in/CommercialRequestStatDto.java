@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommercialRequestRadiusDto {
+public class CommercialRequestStatDto {
     private double cx;  // 중심점 경도
     private double cy;  // 중심점 위도
     private int radius;  // 반경
