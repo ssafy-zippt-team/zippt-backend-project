@@ -20,6 +20,7 @@ public class CommercialResponseStoreDto {
     private String indsSclsNm;   // 상권업종 소분류명
     private String ksicCd;       // 표준산업분류 코드
     private String ksicNm;       // 표준산업분류명
+
     /* 필요 없는 부분 주석
 //            private String ctprvnCd;     // 시도 코드
 //            private String ctprvnNm;     // 시도명
