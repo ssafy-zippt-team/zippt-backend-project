@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.bookmark.repository.BookmarkDao">
+
+	<!--
+		전체 조회
+	-->
+	<select id="getBookmarkList"
+			parameterType="String"
+			resultType="com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto">
+		select
+		 	  A.bookmark_id   AS bookmarkId
+			 ,A.member_uuid  AS memberUuid
+			 ,B.name 	   AS memberName
+			 ,A.apt_Seq    AS aptSeq
+			 ,C.apt_nm     AS aptName
+			 ,A.created_at AS createdAt
+			 ,A.updated_at AS updatedAt
+		FROM  bookmarks AS A
+		LEFT OUTER JOIN member AS B ON A.member_uuid = B.member_uuid
+		LEFT OUTER JOIN houseinfos AS C ON A.apt_seq = C.apt_seq
+		WHERE A.member_uuid = #{memberUuid}
+		ORDER BY A.updated_at DESC
+
+	</select>
+	<!--
+		저장
+	-->
+	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.BookmarkEntity">
+		INSERT INTO bookmarks (member_uuid,apt_Seq, created_at, updated_at)
+		VALUES (#{memberUuid}, #{aptSeq}, NOW(), NOW())
+	</insert>
+
+	<!--
+		삭제
+	-->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bookmarks WHERE bookmark_id = #{bookmarkId}
+	</delete>
+
+
+</mapper>

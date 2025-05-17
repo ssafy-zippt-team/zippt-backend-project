@@ -25,7 +25,7 @@
 			 ,A.updated_at AS updatedAt
 		FROM  boards AS A
 		LEFT OUTER JOIN member AS B ON A.member_id = B.member_id
-		ORDER BY updated_at DESC
+		ORDER BY A.updated_at DESC
 		LIMIT #{size} OFFSET #{offset};
 
 	</select>
@@ -46,5 +46,32 @@
 		LEFT OUTER JOIN member AS B ON A.member_id = B.member_id
 		WHERE A.board_id = #{boardId}
 	</select>
+
+	<!--
+		저장
+	-->
+	<insert id="insert" parameterType="com.ssafy.home.Heo.board.entity.BoardEntity">
+		INSERT INTO boards (title, content, member_id, created_at, updated_at, views)
+		VALUES (#{title}, #{content}, #{memberId}, NOW(), NOW(), 0)
+	</insert>
+
+	<!--
+		삭제
+	-->
+	<delete id="delete" parameterType="String">
+		DELETE FROM boards WHERE board_id = #{boardId}
+	</delete>
+
+	<!--
+		수정
+	-->
+	<update id="update" parameterType="com.ssafy.home.Heo.board.entity.BoardEntity">
+		UPDATE boards
+		SET title = #{title},
+			content = #{content},
+			updated_at = NOW()
+		WHERE board_id = #{boardId}
+	</update>
+
 
 </mapper>

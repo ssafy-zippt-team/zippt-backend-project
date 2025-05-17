@@ -6,7 +6,7 @@
 
 	
 	<!-- 아이디, 비번을 통한 유저정보 조회(id, name 데이터를 조회) -->
-	<select id="findHouseByAptSeq" parameterType="String"   resultType="com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto">
+	<select id="findHouseByAptSeq" parameterType="String"   resultType="com.ssafy.home.Heo.house.entity.HouseEntity">
 		SELECT
 			apt_seq,
 			sgg_cd,
@@ -25,19 +25,28 @@
 		WHERE apt_seq = #{aptSeq}
 	</select>
 
+
 	<select id="getHouseListCount" resultType="int">
 		SELECT COUNT(*) FROM houseinfos
 	</select>
 	<select id="getHouseList"
 			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
-			resultType="com.ssafy.home.Heo.house.dto.out.HouseResponseDto">
+			resultType="com.ssafy.home.Heo.house.entity.HouseEntity">
 
 		SELECT
-		apt_seq AS aptSeq,
-		umd_nm AS umdNm,
-		jibun,
-		apt_nm AS aptNm,
-		build_year AS buildYear
+			apt_seq,
+			sgg_cd,
+			umd_cd,
+			umd_nm,
+			jibun,
+			road_nm_sgg_cd,
+			road_nm,
+			road_nm_bonbun,
+			road_nm_bubun,
+			apt_nm,
+			build_year,
+			latitude,
+			longitude
 		FROM houseinfos
 		ORDER BY build_year DESC
 		LIMIT #{size} OFFSET #{offset}

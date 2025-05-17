@@ -1,0 +1,38 @@
+package com.ssafy.home.Heo.deal.service;
+
+import com.ssafy.home.Heo.common.page.PageRequestDto;
+import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.deal.condition.SearchCondition;
+import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
+import com.ssafy.home.Heo.deal.entity.DealEntity;
+import com.ssafy.home.Heo.deal.reposiitory.DealDao;
+import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
+public class DealServiceImpl implements DealService{
+    private final DealDao dao;
+
+    @Override
+    public PageResponseDto<DealInfoResponseDto> findDealsByCondition( SearchCondition searchCondition) throws SQLException {
+        List <DealInfoResponseDto> list = dao.findDealsByCondition(searchCondition);
+        int totalCount = dao.getDealCount(searchCondition);
+        return PageResponseDto.<DealInfoResponseDto> withAll()
+                .dtoList(list)
+                .totalCount(totalCount)
+                .pageRequestDTO(searchCondition)
+                .build();
+    }
+
+
+}
