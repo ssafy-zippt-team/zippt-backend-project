@@ -25,7 +25,7 @@ public class RadiusEntity {
 
         @Data
         public static class CommercialArea {
-            private int trarNo;             // 상권번호
+            private String trarNo;             // 상권번호
             private String mainTrarNm;      // 상권명
             private String ctprvnCd;        // 시도코드
             private String ctprvnNm;        // 시도명
@@ -39,6 +39,7 @@ public class RadiusEntity {
             public static CommercialResponseRadiusDto from(CommercialArea entity){
                 return CommercialResponseRadiusDto.builder()
                         .mainTrarNm(entity.getMainTrarNm())
+                        .trarNo(entity.getTrarNo())
                         .ctprvnCd(entity.getCtprvnCd())
                         .ctprvnNm(entity.getCtprvnNm())
                         .signguCd(entity.getSignguCd())

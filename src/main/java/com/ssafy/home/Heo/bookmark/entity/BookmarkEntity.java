@@ -21,4 +21,5 @@ public class BookmarkEntity {
     private LocalDateTime createdAt;                // 생성일
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;                // 마지막수정
+    private String activeFlag;                      // 플래그
 }

@@ -2,7 +2,9 @@ package com.ssafy.home.Heo.commercial.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestStatDto;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStatDto;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStoreDto;
 import com.ssafy.home.Heo.commercial.entity.CommercialEntity;
 import com.ssafy.home.Heo.commercial.entity.RadiusEntity;
@@ -17,7 +19,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -93,4 +97,33 @@ public class CommercialServiceImpl implements CommercialService {
     }
 
 
+    @Override
+    public CommercialResponseStatDto getCategoryStatistics(CommercialRequestStatDto dto) throws Exception {
+        CommercialRequestRadiusDto radiusDto = CommercialRequestRadiusDto.builder()
+                .cx(dto.getCx())
+                .cy(dto.getCy())
+                .radius(dto.getRadius())
+                .build();
+
+        // 1. 반경 내 상권 목록 조회
+        List<CommercialResponseRadiusDto> areas = getCommercialInRadius(radiusDto);
+        System.out.println("areas = " + areas);
+        // 2. 각 상권의 업소 리스트 조회 및 대분류별 집계
+        Map<String, Integer> categoryCount = new HashMap<>();
+
+        for (CommercialResponseRadiusDto area : areas) {
+            String trarNo = area.getTrarNo();
+            System.out.println("trarNo = " + trarNo);
+            List<CommercialResponseStoreDto> stores = getStoreInCommercial(trarNo);
+            System.out.println("stores = " + stores);
+            // 상가 순회하면서 map에 넣어주기
+            for (CommercialResponseStoreDto store : stores) {
+                String category = store.getIndsLclsNm();
+                if (category == null || category.isBlank()) continue;
+
+                categoryCount.put(category, categoryCount.getOrDefault(category, 0) + 1);
+            }
+        }
+        return new CommercialResponseStatDto(categoryCount);
+    }
 }

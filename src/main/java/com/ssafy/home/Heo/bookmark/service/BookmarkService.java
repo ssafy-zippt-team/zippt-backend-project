@@ -14,4 +14,6 @@ public interface BookmarkService {
     public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException;
     //즐겨찾기 삭제
     public void delete(String bookmarkId) throws SQLException;
+
+    
 }

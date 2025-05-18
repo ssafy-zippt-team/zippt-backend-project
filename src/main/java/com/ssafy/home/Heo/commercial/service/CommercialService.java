@@ -2,7 +2,9 @@ package com.ssafy.home.Heo.commercial.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.in.CommercialRequestStatDto;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStatDto;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStoreDto;
 
 import java.io.UnsupportedEncodingException;
@@ -15,4 +17,5 @@ public interface CommercialService {
 
     public List<CommercialResponseStoreDto> getStoreInCommercial(String trarNo) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException;
 
+    public CommercialResponseStatDto getCategoryStatistics(CommercialRequestStatDto dto) throws Exception;
 }

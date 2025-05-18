@@ -2,10 +2,12 @@ package com.ssafy.home.Heo.commercial.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseRadiusDto;
+import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStatDto;
 import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStoreDto;
 import com.ssafy.home.Heo.commercial.service.CommercialService;
 import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestRadiusVo;
 import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestStatVo;
+import com.ssafy.home.Heo.commercial.vo.out.CommercialResponseStatVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -52,20 +54,14 @@ public class CommercialController {
     /* ===========================================================================================
         # 기본 API END
      =========================================================================================== */
-    /*
     @Operation(summary = "좌표로 상권내 업종 개수 통계값 조회", description = "좌표로 상권내 업종 개수 통계값 조회", tags = {"상권"})
     @GetMapping("/stat")
-    public ResponseEntity<?> radius( @ParameterObject CommercialRequestStatVo vo) throws SQLException, UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
-        log.info("✅ 요청 Vo: {}", vo);
-//        List<CommercialResponsesDto> list = service.getCommercialInRadius(vo.from(vo));
-//        System.out.println("list = " + list);
-        return ResponseEntity.ok(list);
-//        return null;
+    public ResponseEntity<?> getCategoryStatistics(@ParameterObject CommercialRequestStatVo vo) throws Exception {
+        log.info("✅ 통계 요청 Vo: {}", vo);
+        CommercialResponseStatDto result = service.getCategoryStatistics(vo.from(vo));
+        log.info("✅ 통계 응답 Dto: {}", result.getCategoryCountMap() );
+        return ResponseEntity.ok(result);
     }
-    */
-
-
-
 
 
 

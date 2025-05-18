@@ -18,5 +18,7 @@ public interface BookmarkDao {
     void insert(BookmarkEntity bookmarkentity) throws SQLException;
     // 즐겨찾기 삭제
     void delete(String bookmarkId) throws  SQLException;
+//    // 
+//    void toggleActiveFlag(String bookmarkId) throws SQLException;
 
 }
