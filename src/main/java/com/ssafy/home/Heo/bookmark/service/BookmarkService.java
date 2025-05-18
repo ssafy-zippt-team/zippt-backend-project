@@ -12,8 +12,8 @@ public interface BookmarkService {
     List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException;
     //즐겨찾기 등록
     public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException;
-    //즐겨찾기 삭제
+    //즐겨찾기 삭제(토글로 대체)
     public void delete(String bookmarkId) throws SQLException;
-
-    
+    //즐겨찾기 flag 토글 기능
+    void toggleActiveFlag(String bookmarkId) throws SQLException;
 }
