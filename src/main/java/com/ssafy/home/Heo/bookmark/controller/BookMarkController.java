@@ -50,9 +50,9 @@ public class BookMarkController {
         즐겨찾기 저장 END
     ==============================================================*/
     /*==============================================================
-        즐겨찾기 삭제
+        즐겨찾기 삭제 (토글기능 도입으로 사용안함)
     ==============================================================*/
-    @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 삭제", tags = {"즐겨찾기"})
+    @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 삭제(토글기능 도입으로 사용안함)", tags = {"즐겨찾기"})
     @DeleteMapping("/{bookmarkId}")
     public ResponseEntity<Void> delete(
             @Parameter(description = "bookmarkId", example = "1")
@@ -65,6 +65,18 @@ public class BookMarkController {
         즐겨찾기 삭제 END
     ==============================================================*/
 
+    /*==============================================================
+        즐겨찾기 토글
+    ==============================================================*/
+    @Operation(summary = "즐겨찾기 토글", description = "즐겨찾기 토글(삭제,삽입시 활성화)", tags = {"즐겨찾기"})
+    @PatchMapping("/toggle/{bookmarkId}")
+    public ResponseEntity<Void> toggle(@PathVariable String bookmarkId) throws SQLException {
+        service.toggleActiveFlag(bookmarkId);
+        return ResponseEntity.ok().build();
+    }
+    /*==============================================================
+        즐겨찾기 토글 END
+    ==============================================================*/
 
    /*==============================================================
         멤버의 아파트 즐겨찾기 여부 조회 START
@@ -87,6 +99,5 @@ public class BookMarkController {
     /*==============================================================
         멤버의 아파트 즐겨찾기 여부 조회 END
     ==============================================================*/
-
 
 }

@@ -22,6 +22,7 @@
 		LEFT OUTER JOIN member AS B ON A.member_uuid = B.member_uuid
 		LEFT OUTER JOIN houseinfos AS C ON A.apt_seq = C.apt_seq
 		WHERE A.member_uuid = #{memberUuid}
+		AND   A.active_flag = 'Y'
 		ORDER BY A.updated_at DESC
 
 	</select>
@@ -41,8 +42,17 @@
 	</delete>
 
 	<!--
+		토글
+	-->
+	<update id="toggleActiveFlag" parameterType="String">
+		UPDATE bookmarks
+		SET active_flag = CASE active_flag WHEN 'Y' THEN 'N' ELSE 'Y' END,
+		updated_at = NOW()
+		WHERE bookmark_id = #{bookmarkId}
+	</update>
+  <!--
             즐겨찾기 여부 조회
-z	-->
+	-->
 	<select id="checkBoolMark"
 			parameterType="map"
 			resultType="boolean">
@@ -57,5 +67,6 @@ z	-->
 				) THEN TRUE
 				ELSE FALSE END
 	</select>
+
 
 </mapper>

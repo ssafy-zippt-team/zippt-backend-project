@@ -16,8 +16,10 @@ public interface BookmarkDao {
     List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException;
     // 즐겨찾기 등록
     void insert(BookmarkEntity bookmarkentity) throws SQLException;
-    // 즐겨찾기 삭제
+    // 즐겨찾기 삭제(flag 도입으로 사용 안함)
     void delete(String bookmarkId) throws  SQLException;
+    // 즐겨찾기 토글 기능
+    void toggleActiveFlag(String bookmarkId) throws SQLException;
 
     // 즐겨찾기 여부 확인
     boolean checkBoolMark(String aptSeq, String memberUuid) throws SQLException;
