@@ -4,8 +4,8 @@ import com.ssafy.home.Heo.common.base.BaseResponseStatus;
 import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
-import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
-import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
+import com.ssafy.home.Heo.house.condition.SearchCondition;
+import com.ssafy.home.Heo.house.dto.out.*;
 import com.ssafy.home.Heo.house.entity.HouseEntity;
 import com.ssafy.home.Heo.house.repository.HouseDao;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class HouseServiceImpl implements HouseService {
     private final HouseDao dao;
+    private final RedisHouseService redisHouseService;
 
     @Override
     public HouseDetailResponseDto findHouseByAptSeq(String aptSeq) throws SQLException {
@@ -47,4 +50,130 @@ public class HouseServiceImpl implements HouseService {
                 .pageRequestDTO(pageRequestDto)
                 .build();
     }
+
+    @Override
+    public PageResponseDto<HouseResponseDto> findHousesByCondition(SearchCondition searchCondition) throws SQLException {
+        List <HouseEntity> list = dao.findHousesByCondition(searchCondition);
+        int totalCount = dao.getHouseCountByCondition(searchCondition);
+        return PageResponseDto.<HouseResponseDto> withAll()
+                .dtoList(list.stream().map(HouseResponseDto::from).collect(Collectors.toList()))
+                .totalCount(totalCount)
+                .pageRequestDTO(searchCondition)
+                .build();
+    }
+
+
+    @Override
+    public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException {
+        String redisKey = "house:" + sggCd + "-" + umdCd;
+
+        // 1. Redis 캐시 조회
+        LookAroundCacheDto cacheDto = redisHouseService.getHouseCache(sggCd, umdCd);
+        if (cacheDto != null &&
+                ((cacheDto.getHouseList() != null && !cacheDto.getHouseList().isEmpty())
+                        || (cacheDto.getDealList() != null && !cacheDto.getDealList().isEmpty()))) {
+            log.info("###Redis 캐시 hit: {}", redisKey);
+            log.info(cacheDto.getHouseList().toString());
+            log.info(cacheDto.getDealList().toString());
+
+            // 북마크는 항상 DB에서 조회
+            List<String> aptSeqList = cacheDto.getHouseList().stream()
+                    .map(HouseMarkerResponseDto::getAptSeq)
+                    .toList();
+            List<BookmarkCountDto> bookmarkList = new ArrayList<>();
+            if(!aptSeqList.isEmpty()){
+                bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
+                Map<String, Integer> bookmarkMap = bookmarkList.stream()
+                        .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
+
+                // 데이터 조립
+                cacheDto.getHouseList().forEach(dto -> {
+                    HouseDealAmountInfoResponseDto deal = cacheDto.getDealList().stream()
+                            .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                            .findFirst()
+                            .orElse(null);
+                    if (deal != null) {
+                        dto.setAmountAvg(deal.getAmountAvg());
+                        dto.setAmountMax(deal.getAmountMax());
+                        dto.setAmountMin(deal.getAmountMin());
+                    }
+                    Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
+                    dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
+                });
+            }
+            return cacheDto.getHouseList();
+        }
+
+        // 2. 캐시가 없으면 DB 조회
+        List<HouseMarkerResponseDto> list = dao.findAllHousesByDong(sggCd, umdCd);
+        List<String> aptSeqList = list.stream()
+                .map(HouseMarkerResponseDto::getAptSeq)
+                .toList();
+        if(!aptSeqList.isEmpty()){
+            List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
+            List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
+            Map<String, Integer> bookmarkMap = bookmarkList.stream()
+                    .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
+
+            // 데이터 조립
+            list.forEach(dto -> {
+                HouseDealAmountInfoResponseDto deal = dealList.stream()
+                        .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                        .findFirst()
+                        .orElse(null);
+                if (deal != null) {
+                    dto.setAmountAvg(deal.getAmountAvg());
+                    dto.setAmountMax(deal.getAmountMax());
+                    dto.setAmountMin(deal.getAmountMin());
+                }
+                Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
+                dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
+            });
+            // 3. Redis 캐싱
+            LookAroundCacheDto newCacheDto = LookAroundCacheDto.builder()
+                    .houseList(list)
+                    .dealList(dealList)
+                    .build();
+            boolean isCached = redisHouseService.setHouseCache(sggCd, umdCd, newCacheDto);
+            if (isCached) {
+                log.info("###Redis 캐싱 성공: {}", redisKey);
+            } else {
+                log.info("##Redis 캐싱 실패로 DB 데이터만 반환: {}", redisKey);
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat, double minLng, double maxLng) throws SQLException {
+        List<HouseMarkerResponseDto> list = dao.findHousesByLatLngRange(minLat, maxLat, minLng, maxLng);
+        List<String> aptSeqList = list.stream()
+                .map(HouseMarkerResponseDto::getAptSeq)
+                .toList();
+        if (!aptSeqList.isEmpty()) {
+            List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
+            List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
+            Map<String, Integer> bookmarkMap = bookmarkList.stream()
+                    .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
+
+            // 데이터 조립
+            list.forEach(dto -> {
+                HouseDealAmountInfoResponseDto deal = dealList.stream()
+                        .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
+                        .findFirst()
+                        .orElse(null);
+                if (deal != null) {
+                    dto.setAmountAvg(deal.getAmountAvg());
+                    dto.setAmountMax(deal.getAmountMax());
+                    dto.setAmountMin(deal.getAmountMin());
+                }
+                Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
+                dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
+            });
+        }
+        return list;
+    }
+
 }
+

@@ -21,4 +21,7 @@ public interface BookmarkDao {
     // 즐겨찾기 토글 기능
     void toggleActiveFlag(String bookmarkId) throws SQLException;
 
+    // 즐겨찾기 여부 확인
+    boolean checkBoolMark(String aptSeq, String memberUuid) throws SQLException;
+
 }

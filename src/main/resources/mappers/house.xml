@@ -5,7 +5,6 @@
 <mapper namespace="com.ssafy.home.Heo.house.repository.HouseDao">
 
 	
-	<!-- 아이디, 비번을 통한 유저정보 조회(id, name 데이터를 조회) -->
 	<select id="findHouseByAptSeq" parameterType="String"   resultType="com.ssafy.home.Heo.house.entity.HouseEntity">
 		SELECT
 			apt_seq,
@@ -20,19 +19,17 @@
 			apt_nm,
 			build_year,
 			latitude,
-			longitude
+			longitude,
+			img_url
 		FROM houseinfos
 		WHERE apt_seq = #{aptSeq}
 	</select>
-
-
 	<select id="getHouseListCount" resultType="int">
 		SELECT COUNT(*) FROM houseinfos
 	</select>
 	<select id="getHouseList"
 			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
 			resultType="com.ssafy.home.Heo.house.entity.HouseEntity">
-
 		SELECT
 			apt_seq,
 			sgg_cd,
@@ -46,13 +43,110 @@
 			apt_nm,
 			build_year,
 			latitude,
-			longitude
+			longitude,
+			img_url
 		FROM houseinfos
 		ORDER BY build_year DESC
 		LIMIT #{size} OFFSET #{offset}
 	</select>
 
-	
+	<!--검색조건[시군구 코드+읍면동 코드] + 정렬조건으로 페이지네이션-->
+	<select id="getHouseCountByCondition"
+			parameterType="com.ssafy.home.Heo.house.condition.SearchCondition"
+			resultType="int">
+		SELECT count(*)
+		FROM houseinfos hi
+		WHERE hi.sgg_cd = #{sggCd}
+		<if test="umdCd != null and umdCd != ''">
+			AND hi.umd_cd = #{umdCd}
+		</if>
+	</select>
 
-	
+	<select id="findHousesByCondition"
+			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
+			resultType="com.ssafy.home.Heo.house.entity.HouseEntity">
+		SELECT
+			apt_seq,
+			sgg_cd,
+			umd_cd,
+			umd_nm,
+			jibun,
+			road_nm_sgg_cd,
+			road_nm,
+			road_nm_bonbun,
+			road_nm_bubun,
+			apt_nm,
+			build_year,
+			latitude,
+			longitude,
+			 img_url
+		FROM houseinfos hi
+		WHERE hi.sgg_cd = #{sggCd}
+		<if test="umdCd != null and umdCd != ''">
+			AND hi.umd_cd = #{umdCd}
+		</if>
+		<choose>
+			<when test="orderCondition != null and orderCondition.name() == 'BUILD_YEAR_ASC'">
+				ORDER BY hi.build_year ASC
+			</when>
+			<when test="orderCondition != null and orderCondition.name() == 'BUILD_YEAR_DESC'">
+				ORDER BY hi.build_year DESC
+			</when>
+		</choose>
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+
+
+	<select id="findAllHousesByDong"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto">
+		SELECT apt_seq,latitude, longitude
+		FROM houseinfos
+		WHERE sgg_cd = #{sggCd}
+		AND umd_cd = #{umdCd}
+	</select>
+
+	<select id="findAllHouseDealAvgByAptSeqList"
+			parameterType="list"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseDealAmountInfoResponseDto">
+		SELECT
+			apt_seq,
+			ROUND(AVG(deal_amount) / 10000.0, 2) AS amount_Avg,
+			ROUND(MAX(deal_amount) / 10000.0, 2) AS amountMax,
+			ROUND(MIN(deal_amount) / 10000.0, 2) AS amountMin
+		FROM housedeals
+		WHERE apt_seq IN
+		<foreach item="aptSeq" collection="list" open="(" separator="," close=")">
+			#{aptSeq}
+		</foreach>
+		GROUP BY apt_seq
+	</select>
+
+	<select id="findAllBookmarkCountByAptSeqList"
+			parameterType="list"
+			resultType="com.ssafy.home.Heo.house.dto.out.BookmarkCountDto">
+		SELECT
+				apt_seq,
+				COUNT(*) AS count
+		FROM 	bookmarks
+		WHERE 	active_flag = 'Y'
+		AND 	apt_seq IN
+		<foreach item="aptSeq" collection="list" open="(" separator="," close=")">
+			#{aptSeq}
+		</foreach>
+		GROUP BY apt_seq
+	</select>
+
+	<select id="findHousesByLatLngRange"
+			parameterType="map"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto">
+		SELECT
+			apt_seq,
+			latitude,
+			longitude
+		FROM houseinfos
+		WHERE latitude BETWEEN #{minLat} AND #{maxLat}
+		AND longitude BETWEEN #{minLng} AND #{maxLng}
+	</select>
+
+
 </mapper>

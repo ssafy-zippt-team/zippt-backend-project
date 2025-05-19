@@ -43,5 +43,20 @@
 	</select>
 
 
+	<!--최근 거래내역 조회-->
+	<select id="findTopTenLatestDeals"
+			parameterType="map"
+			resultType="com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto">
+		SELECT
+			CONCAT(hd.deal_year, '-', LPAD(hd.deal_month, 2, '0'), '-', LPAD(hd.deal_day, 2, '0')) AS deal_date,
+			CONCAT(hd.floor, '층') AS floor,
+			CONCAT(hd.exclu_use_ar, '(㎡)') AS exclu_use_ar,
+			FORMAT(hd.deal_amount, 0) AS deal_amount
+			FROM housedeals hd
+		WHERE hd.apt_seq = #{aptSeq}
+		ORDER BY hd.deal_year desc, hd.deal_month desc, hd.deal_day desc
+		LIMIT #{limit}
+	</select>
+
 	
 </mapper>

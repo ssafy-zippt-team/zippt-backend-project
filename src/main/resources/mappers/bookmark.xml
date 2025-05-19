@@ -50,5 +50,23 @@
 		updated_at = NOW()
 		WHERE bookmark_id = #{bookmarkId}
 	</update>
+  <!--
+            즐겨찾기 여부 조회
+	-->
+	<select id="checkBoolMark"
+			parameterType="map"
+			resultType="boolean">
+		SELECT CASE
+				WHEN EXISTS (
+					SELECT 1
+					FROM bookmarks AS bm
+					WHERE bm.apt_seq = #{aptSeq}
+					AND bm.member_uuid = #{memberUuid}
+					AND bm.active_flag = 'Y'
+
+				) THEN TRUE
+				ELSE FALSE END
+	</select>
+
 
 </mapper>

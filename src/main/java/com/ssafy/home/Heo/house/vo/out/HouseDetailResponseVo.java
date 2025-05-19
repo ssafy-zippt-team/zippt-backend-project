@@ -19,6 +19,7 @@ public class HouseDetailResponseVo {
     private int buildYear; // 준공년도
     private float latitude; // 위도
     private float longitude; // 경도
+    private String imgUrl;
 
 
 }

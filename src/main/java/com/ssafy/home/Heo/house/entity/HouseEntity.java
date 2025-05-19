@@ -22,6 +22,7 @@ public class HouseEntity {
     private int buildYear; // 준공년도
     private float latitude; // 위도
     private float longitude; // 경도
+    private String imgUrl; // 이미지 경로
 
 
 }
