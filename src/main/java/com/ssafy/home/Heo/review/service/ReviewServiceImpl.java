@@ -1,14 +1,20 @@
-package com.ssafy.home.Heo.board.service;
+package com.ssafy.home.Heo.review.service;
 
 import com.ssafy.home.Heo.board.dto.in.BoardSaveDto;
 import com.ssafy.home.Heo.board.dto.in.BoardUpdateDto;
 import com.ssafy.home.Heo.board.dto.out.BoardDetailResponseDto;
 import com.ssafy.home.Heo.board.dto.out.BoardResponseDto;
+import com.ssafy.home.Heo.board.entity.BoardEntity;
 import com.ssafy.home.Heo.board.repository.BoardDao;
+import com.ssafy.home.Heo.board.vo.out.BoardResponseVo;
 import com.ssafy.home.Heo.common.base.BaseResponseStatus;
 import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.review.dto.in.ReviewSaveDto;
+import com.ssafy.home.Heo.review.dto.in.ReviewUpdateDto;
+import com.ssafy.home.Heo.review.dto.out.ReviewDetailResponseDto;
+import com.ssafy.home.Heo.review.repository.ReviewDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,74 +27,66 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class BoardServiceImpl implements BoardService {
-    private final BoardDao dao;
+public class ReviewServiceImpl implements ReviewService {
+    private final ReviewDao dao;
+
     /*==============================================================
-        공지사항 전체 조회
+      리뷰 상세 조회
     ==============================================================*/
     @Override
-    public PageResponseDto<BoardResponseDto> getBoardList(PageRequestDto pageRequestDto) throws SQLException {
-        // 1. 목록 조회
-        List<BoardResponseDto> list = dao.getBoardList(pageRequestDto);
-
+    public PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException {
+//        log.info("aptSeq = {}", aptSeq);
+//        log.info("memberUuid = {}", memberUuid);
+//        log.info("offset = {}", pageRequestDto.getOffset());
+//        log.info("size = {}", pageRequestDto.getSize());
+        List<ReviewDetailResponseDto> list = dao.getReviewList(pageRequestDto,memberUuid,aptSeq);
+        log.info("list = {}", list);
         // 2. 전체 개수 조회
-        int totalCount = dao.getBoardListCount();
+        int totalCount = dao.getReviewListCount();
         log.info("total = "+totalCount);
         System.out.println("totalCount = " + totalCount);
         // 3. 응답 조립
-        return PageResponseDto.<BoardResponseDto> withAll()
+        return PageResponseDto.<ReviewDetailResponseDto> withAll()
                 .dtoList(list)
                 .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDto)
                 .build();
     }
     /*==============================================================
-      공지사항 전체 조회 END
+        리뷰 조회 END
     ==============================================================*/
     /*==============================================================
-      공지사항 상세 조회
+        리뷰 등록
     ==============================================================*/
     @Override
-    public BoardDetailResponseDto findBoardByboardId(String boardId) throws SQLException {
-        BoardDetailResponseDto res = dao.findBoardByboardId(boardId);
-        if(res == null) throw new BaseException(BaseResponseStatus.NO_EXIST_BOARD);
-        return res;
-    }
-    /*==============================================================
-        공지사항 상세 조회 END
-    ==============================================================*/
-    /*==============================================================
-        공지사항 등록
-    ==============================================================*/
-    @Override
-    public int insert(BoardSaveDto boardsavedto) throws SQLException {
-        int cnt = dao.insert(BoardSaveDto.from(boardsavedto));
+    public int insert(ReviewSaveDto reviewsavedto) throws SQLException {
+        int cnt = dao.insert(ReviewSaveDto.from(reviewsavedto));
         System.out.println("조회된 행 = " + cnt);
 //        일단 보류
 //        if (cnt == 0) throw new BaseException(BaseResponseStatus.NO_EXIST_BOARD);
         return cnt;
     }
     /*==============================================================
-        공지사항 등록 END
+        리뷰 등록 END
     ==============================================================*/
      /*==============================================================
-        공지사항 삭제
+        리뷰 삭제
     ==============================================================*/
     @Override
-    public void delete(String boardId) throws SQLException {
-        dao.delete(boardId);
+    public void delete(String memberUuid) throws SQLException {
+        dao.delete(memberUuid);
     }
     /*==============================================================
-        공지사항 삭제 END
+        리뷰 삭제 END
     ==============================================================*/
      /*==============================================================
-        공지사항 업데이트
+        리뷰 업데이트
     ==============================================================*/
     @Override
-    public void update(BoardUpdateDto boardupdatedto) throws SQLException {
-        dao.update(BoardUpdateDto.from(boardupdatedto));
+    public void update(ReviewUpdateDto reviewupdatedto) throws SQLException {
+        dao.update(ReviewUpdateDto.from(reviewupdatedto));
     }
     /*==============================================================
-        공지사항 업데이트 END
+        리뷰 업데이트 END
     ==============================================================*/
 }

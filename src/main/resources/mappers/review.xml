@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.review.repository.ReviewDao">
+
+	<!--
+	    조회
+	-->
+	<select id="getReviewList" parameterType="map"   resultType="com.ssafy.home.Heo.review.dto.out.ReviewDetailResponseDto">
+		select
+		 A.review_id   AS reviewId
+		,A.member_uuid AS memberUuid
+		,B.name        AS memberName
+		,A.content
+		,A.created_at AS createdAt
+		,A.updated_at AS updatedAt
+		FROM  reviews  AS A
+		LEFT OUTER JOIN member AS B ON A.member_uuid = B.member_uuid
+		WHERE A.member_uuid = #{memberUuid}
+		AND A.apt_seq = #{aptSeq}
+		ORDER BY A.updated_at DESC
+		LIMIT #{pageRequestDto.size} OFFSET #{pageRequestDto.offset}
+	</select>
+
+	<select id="getReviewListCount" resultType="int">
+		SELECT COUNT(*) FROM reviews
+	</select>
+
+	<!--
+		저장
+	-->
+	<insert id="insert" parameterType="com.ssafy.home.Heo.review.entity.ReviewEntity">
+		INSERT INTO reviews (member_uuid, content, created_at, updated_at, apt_seq)
+		VALUES (#{memberUuid}, #{content}, NOW(), NOW(), #{aptSeq})
+	</insert>
+
+	<!--
+		삭제
+	-->
+	<delete id="delete" parameterType="String">
+		DELETE FROM reviews WHERE review_id = #{reviewId}
+	</delete>
+
+	<!--
+		수정
+	-->
+	<update id="update" parameterType="com.ssafy.home.Heo.review.entity.ReviewEntity">
+		UPDATE reviews
+		SET content = #{content},
+			updated_at = NOW()
+		WHERE review_id = #{reviewId}
+	</update>
+
+
+</mapper>
