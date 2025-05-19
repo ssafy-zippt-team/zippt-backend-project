@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class ReviewDetailResponseVo {
-    private int reviewId;                            // 공지사항 코드
+    private int reviewId;                            // 리뷰 코드
     private String memberUuid;                       // 사용자 uuid
     private String memberName;                       // 사용자 이름
     private String content;                          // 내용

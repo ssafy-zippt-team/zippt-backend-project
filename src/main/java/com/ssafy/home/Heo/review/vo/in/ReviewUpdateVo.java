@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ReviewUpdateVo {
 
     @Schema(description = "리뷰 ID", example = "1")
-    private int reviewId;                            // 공지사항 코드
+    private int reviewId;                            // 리뷰 코드
     @Schema(description = "리뷰 내용", example = "리뷰 내용 수정완료")
     private String content;                         // 내용
     @Schema(description = "사용자 UUID", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")

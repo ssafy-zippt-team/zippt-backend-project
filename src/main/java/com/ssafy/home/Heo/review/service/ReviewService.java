@@ -14,13 +14,13 @@ import java.sql.SQLException;
 
 public interface ReviewService {
 
-    //상세 조회
+    //리뷰 조회
     PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException;
 
-    //공지사항 등록
+    //리뷰 등록
     public int insert(ReviewSaveDto reviewsavedto) throws SQLException;
-    //공지사항 삭제
+    //리뷰 삭제
     public void delete(String boardId) throws SQLException;
-    //공지사항 업데이트
+    //리뷰 업데이트
     public void update(ReviewUpdateDto reviewupdatedto) throws SQLException;
 }

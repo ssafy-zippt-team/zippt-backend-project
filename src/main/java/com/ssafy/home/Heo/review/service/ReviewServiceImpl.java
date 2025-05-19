@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewDao dao;
 
     /*==============================================================
-      공지사항 상세 조회
+      리뷰 상세 조회
     ==============================================================*/
     @Override
     public PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException {
@@ -53,10 +53,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
     /*==============================================================
-        공지사항 상세 조회 END
+        리뷰 조회 END
     ==============================================================*/
     /*==============================================================
-        공지사항 등록
+        리뷰 등록
     ==============================================================*/
     @Override
     public int insert(ReviewSaveDto reviewsavedto) throws SQLException {
@@ -67,26 +67,26 @@ public class ReviewServiceImpl implements ReviewService {
         return cnt;
     }
     /*==============================================================
-        공지사항 등록 END
+        리뷰 등록 END
     ==============================================================*/
      /*==============================================================
-        공지사항 삭제
+        리뷰 삭제
     ==============================================================*/
     @Override
     public void delete(String memberUuid) throws SQLException {
         dao.delete(memberUuid);
     }
     /*==============================================================
-        공지사항 삭제 END
+        리뷰 삭제 END
     ==============================================================*/
      /*==============================================================
-        공지사항 업데이트
+        리뷰 업데이트
     ==============================================================*/
     @Override
     public void update(ReviewUpdateDto reviewupdatedto) throws SQLException {
         dao.update(ReviewUpdateDto.from(reviewupdatedto));
     }
     /*==============================================================
-        공지사항 업데이트 END
+        리뷰 업데이트 END
     ==============================================================*/
 }

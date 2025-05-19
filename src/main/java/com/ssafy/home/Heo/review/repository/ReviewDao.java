@@ -17,19 +17,19 @@ import java.util.List;
 @Repository
 public interface ReviewDao {
 
-    // 공지 사항 상세조회
+    // 리뷰 조회
     List<ReviewDetailResponseDto> getReviewList(@Param("pageRequestDto") PageRequestDto pageRequestDto,
                                                 @Param("memberUuid") String memberUuid,
                                                 @Param("aptSeq") String aptSeq ) throws SQLException;
 
-    // 공지 사항 조회 cnt 가져오기
+    // 리뷰 조회 cnt 가져오기
     int getReviewListCount() throws SQLException;
 
-    // 공지 사항 등록
+    // 리뷰 등록
     int insert(ReviewEntity reviewentity) throws SQLException;
-    // 공지 사항 삭제
+    // 리뷰 삭제
     void delete(String memberUuid) throws  SQLException;
-    // 공지 사항 업데이트
+    // 리뷰 업데이트
     void update(ReviewEntity reviewentity) throws SQLException;
 
 
