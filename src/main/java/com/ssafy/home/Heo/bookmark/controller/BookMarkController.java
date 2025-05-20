@@ -27,11 +27,11 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 조회", description = "즐겨찾기 조회", tags = {"즐겨찾기"})
     @GetMapping("/list/{memberUuid}")
-    public ResponseEntity<?> list(
+    public BaseResponse<List<BookmarkResponseDto>> list(
             @Parameter(description = "memberUuid", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")
             @PathVariable(name = "memberUuid")String memberuuid) throws SQLException {
         List<BookmarkResponseDto> list = service.getBookmarkList(memberuuid);
-        return ResponseEntity.ok(list);
+        return BaseResponse.of(list);
     }
     /*==============================================================
         즐겨찾기 전체 조회 END
@@ -41,10 +41,10 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 저장", description = "즐겨찾기 저장", tags = {"즐겨찾기"})
     @PostMapping("/")
-    public ResponseEntity<Void> insert(@ParameterObject BookmarkSaveVo bookmarksavevo) throws SQLException {
+    public BaseResponse<String> insert(@ParameterObject BookmarkSaveVo bookmarksavevo) throws SQLException {
         System.out.println("Insert 객체 받아오기 bookmark = " + bookmarksavevo);
         service.insert(bookmarksavevo.from(bookmarksavevo));
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("즐겨찾기 저장에 성공하였습니다.");
     }
     /*==============================================================
         즐겨찾기 저장 END
@@ -54,12 +54,12 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 삭제(토글기능 도입으로 사용안함)", tags = {"즐겨찾기"})
     @DeleteMapping("/{bookmarkId}")
-    public ResponseEntity<Void> delete(
+    public BaseResponse<String> delete(
             @Parameter(description = "bookmarkId", example = "1")
             @PathVariable(name = "bookmarkId")String bookmarkId) throws SQLException {
         System.out.println("bookmarkId = " + bookmarkId);
         service.delete(bookmarkId);
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("즐겨찾기 삭제 성공하였습니다.");
     }
     /*==============================================================
         즐겨찾기 삭제 END
@@ -70,9 +70,9 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 토글", description = "즐겨찾기 토글(삭제,삽입시 활성화)", tags = {"즐겨찾기"})
     @PatchMapping("/toggle/{bookmarkId}")
-    public ResponseEntity<Void> toggle(@PathVariable String bookmarkId) throws SQLException {
+    public BaseResponse<String> toggle(@PathVariable String bookmarkId) throws SQLException {
         service.toggleActiveFlag(bookmarkId);
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("즐겨찾기 토글 성공하였습니다.");
     }
     /*==============================================================
         즐겨찾기 토글 END

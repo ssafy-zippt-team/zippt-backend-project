@@ -19,6 +19,5 @@ public class CommercialResponseStatDto {
             return CommercialResponseStatVo.builder()
                 .categoryCountMap(dto.getCategoryCountMap())
                 .build();
-
         }
 }
