@@ -7,9 +7,11 @@ import lombok.Getter;
 @Builder
 public class HouseMarkerResponseVo {
     private String aptSeq;
+    private String umdNm; // 동이름
+    private String aptNm; // 아파트명
+    private String imgUrl;
     private float latitude;
     private float longitude;
-    private int bookMarkCount;
     private float amountAvg;
     private float amountMax;
     private float amountMin;

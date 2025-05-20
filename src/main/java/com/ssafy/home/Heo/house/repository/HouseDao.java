@@ -29,8 +29,6 @@ public interface HouseDao {
     /**
      * 프론트에 마커로 내보낼 메서드들
      */
-    // 검색조건[시군구 코드+읍면동 코드]로 모든 집정보 가져옴
-    List <HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd)throws SQLException;
     // List<아파트시퀀스> 로 아파트들의 매매가 평균 조회
     List<HouseDealAmountInfoResponseDto> findAllHouseDealAvgByAptSeqList(List<String> aptSeqList) throws  SQLException;
     List<BookmarkCountDto> findAllBookmarkCountByAptSeqList(List<String> aptSeqList) throws  SQLException;

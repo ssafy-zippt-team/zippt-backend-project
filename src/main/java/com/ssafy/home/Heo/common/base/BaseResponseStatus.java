@@ -55,6 +55,7 @@ public enum BaseResponseStatus {
 
     // House
     NO_EXIST_HOUSE(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 집 입니다"),
+    NO_IMAGE_EXIST_HOUSE(HttpStatus.NOT_FOUND, false, 404, "이미지가 존재하지 않는 집 입니다"),
     // Board
     NO_EXIST_BOARD(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 공지사항 입니다"),
 

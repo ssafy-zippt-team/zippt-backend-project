@@ -1,18 +1,19 @@
 package com.ssafy.home.Heo.house.controller;
 
 import com.ssafy.home.Heo.common.base.BaseResponse;
-import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
-import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
-import com.ssafy.home.Heo.deal.vo.DealInfoResponseVo;
+
 import com.ssafy.home.Heo.house.condition.SearchCondition;
 import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseResponseDto;
+import com.ssafy.home.Heo.house.dto.out.HouseSimilarResponseDto;
+import com.ssafy.home.Heo.house.service.HouseVectorService;
 import com.ssafy.home.Heo.house.vo.out.HouseMarkerResponseVo;
 import com.ssafy.home.Heo.house.vo.out.HouseResponseVo;
 import com.ssafy.home.Heo.house.service.HouseService;
 import com.ssafy.home.Heo.house.vo.out.HouseDetailResponseVo;
+import com.ssafy.home.Heo.house.vo.out.HouseSimilarResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/houses")
 public class HouseController {
     private final HouseService service;
+    private final HouseVectorService vectorService;
 
     @Operation(summary = "집 정보 조회", description = "아파트시퀀스(apt_seq) 로 매물 상세 조회", tags = {"house"})
     @GetMapping("/{aptSeq}")
@@ -66,24 +68,6 @@ public class HouseController {
     }
 
 
-    @Operation(summary = "동의 아파트 리스트 조회",
-            description = "해당 동의 모든 아파트 정보 리턴", tags = {"house"})
-    @GetMapping("/dong/apt-list")
-    public BaseResponse<List<HouseMarkerResponseVo>> findAllHousesByDong(
-            @Parameter(description = "시군구 코드", example = "11110")
-            @RequestParam String sggCd,
-
-            @Parameter(description = "읍면동 코드", example = "17500")
-            @RequestParam String umdCd
-    ) throws SQLException {
-        // Service → Dto 리스트 반환
-        List<HouseMarkerResponseDto> dtoList = service.findAllHousesByDong(sggCd, umdCd);
-        return BaseResponse.of(
-                dtoList.stream()
-                        .map(HouseMarkerResponseDto::from)
-                        .collect(Collectors.toList())
-        );
-    }
     @Operation(summary = "좌표(위도경도)로 아파트 리스트 조회",
             description = "해당 좌표 범위에 든 아파트 정보 리턴", tags = {"house"})
     @GetMapping("/around")
@@ -105,5 +89,43 @@ public class HouseController {
                         .collect(Collectors.toList())
         );
     }
+
+    @Operation(summary = "아파트명 검색 시 유사한 매물정보 리턴",
+            description = "레디스 벡터스토어에서 0.8 이상 5개 리턴", tags = {"house"})
+    @GetMapping("/search")
+    public BaseResponse<List<HouseSimilarResponseVo>> getHouseTermSimilar(
+            @Parameter(description = "검색어", example = "파크")
+            @RequestParam String term){
+            
+        List<HouseSimilarResponseDto> dtoList = vectorService.getHouseTermSimilar(term);
+
+        return BaseResponse.of(
+                dtoList.stream()
+                        .map(HouseSimilarResponseDto::from)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Operation(summary = "아파트명 검색 시 유사한 이미지의 매물정보 리턴",
+            description = "비슷한 외관의 아파트 정보 4개 리턴", tags = {"house"})
+    @GetMapping("/similar")
+    public BaseResponse<List<HouseSimilarResponseVo>> getHouseImageSimilar(
+            @Parameter(description = "이미지가 존재하는 apt_seq 입력", example = "11110-128")
+            @RequestParam String aptSeq){
+
+        List<HouseSimilarResponseDto> dtoList = null;
+        try {
+            dtoList = vectorService.getHouseImageSimilar(aptSeq);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return BaseResponse.of(
+                dtoList.stream()
+                        .map(HouseSimilarResponseDto::from)
+                        .collect(Collectors.toList())
+        );
+    }
+
 
 }

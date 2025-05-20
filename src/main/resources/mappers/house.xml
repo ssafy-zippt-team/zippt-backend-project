@@ -141,6 +141,9 @@
 			resultType="com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto">
 		SELECT
 			apt_seq,
+			umd_nm,
+			img_url,
+			apt_nm,
 			latitude,
 			longitude
 		FROM houseinfos
