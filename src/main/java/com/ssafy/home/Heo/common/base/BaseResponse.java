@@ -14,35 +14,6 @@ public record BaseResponse<T>(HttpStatusCode httpStatus, Boolean isSuccess, Stri
      * 3. 요청에 실패한 경우
      */
 
-    /**
-     * 1. Return 객체가 필요한 경우 -> 성공
-     * @param result
-     */
-//    public BaseResponse(T result) {
-//        this(HttpStatus.OK, true, SUCCESS.getMessage(), SUCCESS.getCode(), result);
-//    }
-//
-//    /**
-//     * 2. Return 객체가 필요 없는 경우 -> 성공
-//     */
-//
-//    public BaseResponse() {
-//        this(HttpStatus.OK, true, SUCCESS.getMessage(), SUCCESS.getCode(), null);
-//    }
-//
-//    /**
-//     * 3. 요청에 실패한 경우
-//     * @param status
-//     */
-//    public BaseResponse(BaseResponseStatus status) {
-//        this(status.getHttpStatusCode(), status.isSuccess(), status.getMessage(), status.getCode(), null);
-//    }
-
-
-    /**
-     * BaseResponse 수정
-     *
-     */
     // 타입 명확히 지정한 static 메서드 (컨트롤러 전용)
     public static <T> BaseResponse<T> of(T result) {
         return new BaseResponse<>(HttpStatus.OK, true, SUCCESS.getMessage(), SUCCESS.getCode(), result);
