@@ -8,6 +8,7 @@ import com.ssafy.home.Heo.commercial.service.CommercialService;
 import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestRadiusVo;
 import com.ssafy.home.Heo.commercial.vo.in.CommercialRequestStatVo;
 import com.ssafy.home.Heo.commercial.vo.out.CommercialResponseStatVo;
+import com.ssafy.home.Heo.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/Commercials")
 public class CommercialController {
 
@@ -34,33 +36,33 @@ public class CommercialController {
      =========================================================================================== */
     @Operation(summary = "반경 상권 조회", description = "반경 상권 조회", tags = {"상권"})
     @GetMapping("/radius")
-    public ResponseEntity<?> radius( @ParameterObject  CommercialRequestRadiusVo vo) throws SQLException, UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
+    public BaseResponse<List<CommercialResponseRadiusDto>> radius(@ParameterObject  CommercialRequestRadiusVo vo) throws SQLException, UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
         log.info("✅ 요청 Vo: {}", vo);
         List<CommercialResponseRadiusDto> list = service.getCommercialInRadius(vo.from(vo));
         log.info("✅ 응답 list: {}", list);
-        return ResponseEntity.ok(list);
+        return BaseResponse.of(list);
     }
 
     @Operation(summary = "상권별 업소 조회", description = "상권별 업소 조회", tags = {"상권"})
     @GetMapping("/storeListInArea/{trarNo}")
-    public ResponseEntity<?> storeListInArea(
+    public BaseResponse<List<CommercialResponseStoreDto>> storeListInArea(
             @Parameter(description = "trarNo", example = "10355")
             @PathVariable(name = "trarNo")String trarNo
     ) throws SQLException, UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
         List<CommercialResponseStoreDto> list = service.getStoreInCommercial(trarNo);
         System.out.println("list = " + list);
-        return ResponseEntity.ok(list);
+        return BaseResponse.of(list);
     }
     /* ===========================================================================================
         # 기본 API END
      =========================================================================================== */
     @Operation(summary = "좌표로 상권내 업종 개수 통계값 조회", description = "좌표로 상권내 업종 개수 통계값 조회", tags = {"상권"})
     @GetMapping("/stat")
-    public ResponseEntity<?> getCategoryStatistics(@ParameterObject CommercialRequestStatVo vo) throws Exception {
+    public BaseResponse<CommercialResponseStatVo> getCategoryStatistics(@ParameterObject CommercialRequestStatVo vo) throws Exception {
         log.info("✅ 통계 요청 Vo: {}", vo);
         CommercialResponseStatDto result = service.getCategoryStatistics(vo.from(vo));
         log.info("✅ 통계 응답 Dto: {}", result.getCategoryCountMap() );
-        return ResponseEntity.ok(result);
+        return BaseResponse.of(result.from(result));
     }
 
 
