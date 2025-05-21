@@ -58,7 +58,7 @@ public class DealController {
             @RequestParam(required = false) Integer limit
     ) throws SQLException {
         return  BaseResponse.of(
-                dealService.findTopTenLatestDeals(aptSeq,limit)
+                dealService.findTopNLatestDeals(aptSeq,limit)
                         .stream().map(DealInfoResponseDto::from).collect(Collectors.toList())
         );
     }

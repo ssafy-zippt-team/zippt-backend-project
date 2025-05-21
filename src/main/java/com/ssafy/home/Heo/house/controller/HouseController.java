@@ -16,6 +16,7 @@ import com.ssafy.home.Heo.house.vo.out.HouseDetailResponseVo;
 import com.ssafy.home.Heo.house.vo.out.HouseSimilarResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springdoc.core.annotations.ParameterObject;
@@ -29,11 +30,12 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/houses")
+@Tag(name = "아파트", description = "아파트 관련 API")
 public class HouseController {
     private final HouseService service;
     private final HouseVectorService vectorService;
 
-    @Operation(summary = "집 정보 조회", description = "아파트시퀀스(apt_seq) 로 매물 상세 조회", tags = {"house"})
+    @Operation(summary = "집 정보 조회", description = "아파트시퀀스(apt_seq) 로 매물 상세 조회")
     @GetMapping("/{aptSeq}")
     public BaseResponse<HouseDetailResponseVo> findHouseByAptSeq(
             @Parameter(
@@ -51,7 +53,7 @@ public class HouseController {
      *  거래내역 리스트 필터링[시군구코드, 읍면동코드]  , 정렬조건[최신순,오래된순,높은가격,낮은가격]
      */
     @Operation(summary = "아파트 리스트 조회 [필터링, 정렬] 페이지네이션 ",
-            description = "필터링[시군구코드+읍면동코드] 정렬[준공년도, 북마크(미구현) ]", tags = {"house"})
+            description = "필터링[시군구코드+읍면동코드] 정렬[준공년도, 북마크(미구현) ]")
     @GetMapping("/condition-list")
     public  PageResponseDto<HouseResponseVo> findHousesByCondition(
             @ParameterObject SearchCondition searchCondition) throws SQLException {
@@ -69,7 +71,7 @@ public class HouseController {
 
 
     @Operation(summary = "좌표(위도경도)로 아파트 리스트 조회",
-            description = "해당 좌표 범위에 든 아파트 정보 리턴", tags = {"house"})
+            description = "해당 좌표 범위에 든 아파트 정보 리턴")
     @GetMapping("/around")
     public BaseResponse<List<HouseMarkerResponseVo>> findHousesByLatLngRange(
             @Parameter(description = "위도 최소값", example = "37.5207")
@@ -91,7 +93,7 @@ public class HouseController {
     }
 
     @Operation(summary = "아파트명 검색 시 유사한 매물정보 리턴",
-            description = "레디스 벡터스토어에서 0.8 이상 5개 리턴", tags = {"house"})
+            description = "레디스 벡터스토어에서 0.8 이상 5개 리턴")
     @GetMapping("/search")
     public BaseResponse<List<HouseSimilarResponseVo>> getHouseTermSimilar(
             @Parameter(description = "검색어", example = "파크")
@@ -107,7 +109,7 @@ public class HouseController {
     }
 
     @Operation(summary = "아파트명 검색 시 유사한 이미지의 매물정보 리턴",
-            description = "비슷한 외관의 아파트 정보 4개 리턴", tags = {"house"})
+            description = "비슷한 외관의 아파트 정보 4개 리턴")
     @GetMapping("/similar")
     public BaseResponse<List<HouseSimilarResponseVo>> getHouseImageSimilar(
             @Parameter(description = "이미지가 존재하는 apt_seq 입력", example = "11110-128")

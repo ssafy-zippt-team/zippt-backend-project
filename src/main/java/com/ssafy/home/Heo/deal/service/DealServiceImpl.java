@@ -35,7 +35,7 @@ public class DealServiceImpl implements DealService{
     }
 
     @Override
-    public List<DealInfoResponseDto> findTopTenLatestDeals(String aptSeq, Integer limit) throws SQLException {
+    public List<DealInfoResponseDto> findTopNLatestDeals(String aptSeq, Integer limit) throws SQLException {
         if(limit == null) limit = 10;
 
         return dao.findTopTenLatestDeals(aptSeq,limit);

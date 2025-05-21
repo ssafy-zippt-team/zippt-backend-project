@@ -16,6 +16,7 @@ import com.ssafy.home.Heo.review.vo.in.ReviewUpdateVo;
 import com.ssafy.home.Heo.review.vo.out.ReviewDetailResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springdoc.core.annotations.ParameterObject;
@@ -28,13 +29,14 @@ import java.sql.SQLException;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
+@Tag(name = "리뷰", description = "리뷰 관련 API")
 public class ReviewController {
     private final ReviewService service;
 
     /*==============================================================
         리뷰 조회
     ==============================================================*/
-    @Operation(summary = "리뷰 조회", description = "맴버별, 아파트별 리뷰 조회", tags = {"리뷰"})
+    @Operation(summary = "회원이 작성한 리뷰 조회", description = "맴버별, 아파트별 리뷰 조회")
     @GetMapping("/{memberUuid}/{aptSeq}")
     public PageResponseDto<ReviewDetailResponseDto> list(
             @Parameter(description = "맴버 UUID", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")
