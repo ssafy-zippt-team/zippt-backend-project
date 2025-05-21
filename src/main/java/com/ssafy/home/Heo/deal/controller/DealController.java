@@ -1,6 +1,7 @@
 package com.ssafy.home.Heo.deal.controller;
 
 import com.ssafy.home.Heo.common.base.BaseResponse;
+import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
 import com.ssafy.home.Heo.deal.condition.SearchCondition;
 import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
@@ -14,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,16 +30,15 @@ public class DealController {
 
     private final DealService dealService;
 
-    /**
-     *  거래내역 리스트 필터링[시군구코드, 읍면동코드]  , 정렬조건[최신순,오래된순,높은가격,낮은가격]
-     */
-    @Operation(summary = "거래내역 리스트 조회 [필터링, 정렬] ",
-            description = "필터링[시군구코드, 읍면동코드] 정렬[최신순,오래된순,높은가격,낮은가격]", tags = {"거래내역"})
-    @GetMapping("/list")
+    @Operation(summary = "아파트 시퀀스로 거래내역 리스트 조회 [페이지네이션] ",
+            description = "apt_seq로 해당 아파트의 거래내역을 최신순 정렬", tags = {"거래내역"})
+    @GetMapping("/list/{aptSeq}")
     public PageResponseDto<DealInfoResponseVo>findDealsByCondition(
-            @ParameterObject SearchCondition searchCondition) throws SQLException {
+            @ParameterObject PageRequestDto requestDto,
+            @Parameter(description = "아파트 식별자", example = "11110-2224")
+            @PathVariable String aptSeq) throws SQLException {
 
-        PageResponseDto<DealInfoResponseDto> dtoPage = dealService.findDealsByCondition(searchCondition);
+        PageResponseDto<DealInfoResponseDto> dtoPage = dealService.findDealsByCondition(requestDto, aptSeq);
         return PageResponseDto.<DealInfoResponseVo>withAll()
                 .dtoList(dtoPage.getDtoList().stream()
                         .map(DealInfoResponseDto::from)
@@ -51,15 +48,12 @@ public class DealController {
                 .build();
     }
 
-    /**
-     *  최신 거래내역 리스트
-     */
     @Operation(summary = "최신 거래내역 리스트 조회",
             description = "apt_seq로 해당 아파트의 최신 10개까지의 거래내역 조회", tags = {"거래내역"})
-    @GetMapping("/latest-list")
+    @GetMapping("/latest-list/{aptSeq}")
     public BaseResponse<List<DealInfoResponseVo>>findTopTenLatestDeals(
             @Parameter(description = "아파트 식별자", example = "11110-2224")
-            @ParameterObject String aptSeq,
+            @PathVariable String aptSeq,
             @Parameter(description = "조회 할 거래내역의 수 (입력 안할 시 10개 조회)", example = "1")
             @RequestParam(required = false) Integer limit
     ) throws SQLException {

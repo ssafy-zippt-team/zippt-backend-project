@@ -76,7 +76,7 @@
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
-		<!--spring ai-->
+		<!--spring ai + redis vector-->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-openai-spring-boot-starter</artifactId>

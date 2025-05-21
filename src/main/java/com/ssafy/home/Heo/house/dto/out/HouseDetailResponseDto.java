@@ -20,7 +20,6 @@ public class HouseDetailResponseDto {
     // dto -> vo
     public static HouseDetailResponseVo from (HouseDetailResponseDto dto){
         return HouseDetailResponseVo.builder()
-
                 .jibun(dto.getJibun())
                 .roadNm(dto.getRoadNm())
                 .roadNmBonbun(dto.getRoadNmBonbun())

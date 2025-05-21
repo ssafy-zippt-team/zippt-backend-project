@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class HouseVectorDaoImpl implements HouseVectorDao {
-    private final VectorStore store; // Spring AI VectorStore (임베딩 모델 포함)
+    private final VectorStore store;
     private final VectorStoreConfig vectorStoreConfig;
 
 
