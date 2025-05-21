@@ -58,10 +58,14 @@ public class BoardController {
     ==============================================================*/
     @Operation(summary = "공지사항 저장", description = "공지사항 저장", tags = {"공지사항"})
     @PostMapping("/save")
-    public ResponseEntity<Void> insert(@ParameterObject BoardSaveVo boardsavevo) throws SQLException {
+    public BaseResponse<String> insert(@ParameterObject BoardSaveVo boardsavevo) throws SQLException {
         System.out.println("Insert 객체 받아오기 boardsavevo = " + boardsavevo);
         int cnt = service.insert(BoardSaveVo.from(boardsavevo));
-        return ResponseEntity.ok().build();
+        if (cnt > 0) {
+            return BaseResponse.of("공지사항이 성공적으로 저장되었습니다.");
+        } else {
+            return BaseResponse.of("공지사항 저장에 실패했습니다.");
+        }
     }
     /*==============================================================
         공지사항 저장 END
@@ -71,12 +75,12 @@ public class BoardController {
     ==============================================================*/
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제", tags = {"공지사항"})
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> delete(
+    public BaseResponse<String> delete(
             @Parameter(description = "공지사항 ID", example = "1")
             @PathVariable(name = "boardId")String boardId) throws SQLException {
         System.out.println("boardId = " + boardId);
         service.delete(boardId);
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("공지사항이 성공적으로 삭제되었습니다.");
     }
     /*==============================================================
         공지사항 삭제 END
@@ -86,10 +90,10 @@ public class BoardController {
     ==============================================================*/
     @Operation(summary = "공지사항 수정", description = "공지사항 수정", tags = {"공지사항"})
     @PatchMapping("/update")
-    public ResponseEntity<Void> update(@ParameterObject BoardUpdateVo boardupdatevo) throws SQLException {
+    public BaseResponse<String> update(@ParameterObject BoardUpdateVo boardupdatevo) throws SQLException {
         System.out.println("객체 받아오기 boardupdatevo = " + boardupdatevo);
         service.update(BoardUpdateVo.from(boardupdatevo));
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("공지사항이 성공적으로 수정되었습니다.");
     }
     /*==============================================================
         공지사항 수정 END

@@ -53,11 +53,11 @@ public class ReviewController {
         리뷰 저장
     ==============================================================*/
     @Operation(summary = "리뷰 저장", description = "리뷰 저장", tags = {"리뷰"})
-    @PostMapping("/save")
-    public ResponseEntity<Void> insert(@ParameterObject ReviewSaveVo reviewsavevo) throws SQLException {
+    @PostMapping("/reviewInsert")
+    public BaseResponse<String> insert(@ParameterObject ReviewSaveVo reviewsavevo) throws SQLException {
         System.out.println("Insert 객체 받아오기 reviewsavevo = " + reviewsavevo);
         int cnt = service.insert(ReviewSaveVo.from(reviewsavevo));
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("리뷰가 성공적으로 저장되었습니다.");
     }
     /*==============================================================
         리뷰 저장 END
@@ -67,12 +67,12 @@ public class ReviewController {
     ==============================================================*/
     @Operation(summary = "리뷰 삭제", description = "리뷰 삭제", tags = {"리뷰"})
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<Void> delete(
+    public BaseResponse<String> delete(
             @Parameter(description = "리뷰 ID", example = "1")
             @PathVariable(name = "reviewId")String reviewId) throws SQLException {
         System.out.println("reviewId = " + reviewId);
         service.delete(reviewId);
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("리뷰가 성공적으로 삭제되었습니다.");
     }
     /*==============================================================
         리뷰 삭제 END
@@ -81,11 +81,11 @@ public class ReviewController {
         리뷰 수정
     ==============================================================*/
     @Operation(summary = "리뷰 수정", description = "리뷰 수정", tags = {"리뷰"})
-    @PatchMapping("/update")
-    public ResponseEntity<Void> update(@ParameterObject ReviewUpdateVo reviewupdatevo) throws SQLException {
+    @PatchMapping("/reviewUpdate")
+    public BaseResponse<String> update(@ParameterObject ReviewUpdateVo reviewupdatevo) throws SQLException {
         System.out.println("객체 받아오기 reviewupdatevo = " + reviewupdatevo);
         service.update(ReviewUpdateVo.from(reviewupdatevo));
-        return ResponseEntity.ok().build();
+        return BaseResponse.of("리뷰가 성공적으로 수정되었습니다.");
     }
     /*==============================================================
         리뷰 수정 END
