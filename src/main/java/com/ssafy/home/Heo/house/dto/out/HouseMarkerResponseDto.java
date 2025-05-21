@@ -10,10 +10,14 @@ import lombok.*;
 @Builder
 public class HouseMarkerResponseDto {
     private String aptSeq; // 아파트코드
+    private String umdNm; // 동이름
+    private String aptNm; // 아파트명
+    private String imgUrl;
+    
+
     private float latitude; // 위도
     private float longitude; // 경도
-    @Setter
-    private int bookMarkCount; // 즐겨찾기 수
+
     @Setter
     private float amountAvg; // 매매 가격 평균
     @Setter
@@ -25,9 +29,11 @@ public class HouseMarkerResponseDto {
     public static HouseMarkerResponseVo from(HouseMarkerResponseDto dto) {
         return HouseMarkerResponseVo.builder()
                 .aptSeq(dto.getAptSeq())
+                .umdNm(dto.getUmdNm())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
-                .bookMarkCount(dto.getBookMarkCount())
+                .aptNm(dto.getAptNm())
+                .imgUrl(dto.getImgUrl())
                 .amountAvg(dto.getAmountAvg())
                 .amountMax(dto.getAmountMax())
                 .amountMin(dto.getAmountMin())

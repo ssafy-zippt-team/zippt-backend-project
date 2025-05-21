@@ -9,12 +9,10 @@
 			resultType="int">
 		SELECT count(*)
 		FROM housedeals hd
-		JOIN houseinfos hi ON hd.apt_seq = hi.apt_seq
-		WHERE hi.sgg_cd = #{sggCd}
-		AND hi.umd_cd = #{umdCd}
+		WHERE hd.apt_seq = #{aptSeq}
 	</select>
 	<select id="findDealsByCondition"
-			parameterType="com.ssafy.home.Heo.deal.condition.SearchCondition"
+			parameterType="map"
 			resultType="com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto">
 		SELECT
 		CONCAT(hd.deal_year, '-', LPAD(hd.deal_month, 2, '0'), '-', LPAD(hd.deal_day, 2, '0')) AS deal_date,
@@ -22,24 +20,9 @@
 		CONCAT(hd.exclu_use_ar, '(㎡)') AS exclu_use_ar,
 		FORMAT(hd.deal_amount, 0) AS deal_amount
 		FROM housedeals hd
-		JOIN houseinfos hi ON hd.apt_seq = hi.apt_seq
-		WHERE hi.sgg_cd = #{sggCd}
-		AND hi.umd_cd = #{umdCd}
-		<choose>
-			<when test="orderCondition != null and orderCondition.name() == 'OLDEST'">
-				ORDER BY hd.deal_year ASC, hd.deal_month ASC, hd.deal_day ASC
-			</when>
-			<when test="orderCondition != null and orderCondition.name() == 'PRICE_ASC'">
-				ORDER BY hd.deal_amount ASC
-			</when>
-			<when test="orderCondition != null and orderCondition.name() == 'PRICE_DESC'">
-				ORDER BY hd.deal_amount DESC
-			</when>
-			<otherwise>
-				ORDER BY hd.deal_year DESC, hd.deal_month DESC, hd.deal_day DESC
-			</otherwise>
-		</choose>
-		LIMIT #{size} OFFSET #{offset}
+		WHERE hd.apt_seq = #{aptSeq}
+		ORDER BY hd.deal_year desc, hd.deal_month desc, hd.deal_day desc
+		LIMIT #{pageRequest.size} OFFSET #{pageRequest.offset}
 	</select>
 
 

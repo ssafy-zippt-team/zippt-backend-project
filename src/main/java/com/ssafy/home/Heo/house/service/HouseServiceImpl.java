@@ -63,87 +63,6 @@ public class HouseServiceImpl implements HouseService {
     }
 
 
-    @Override
-    public List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException {
-        String redisKey = "house:" + sggCd + "-" + umdCd;
-
-        // 1. Redis 캐시 조회
-        LookAroundCacheDto cacheDto = redisHouseService.getHouseCache(sggCd, umdCd);
-        if (cacheDto != null &&
-                ((cacheDto.getHouseList() != null && !cacheDto.getHouseList().isEmpty())
-                        || (cacheDto.getDealList() != null && !cacheDto.getDealList().isEmpty()))) {
-            log.info("###Redis 캐시 hit: {}", redisKey);
-            log.info(cacheDto.getHouseList().toString());
-            log.info(cacheDto.getDealList().toString());
-
-            // 북마크는 항상 DB에서 조회
-            List<String> aptSeqList = cacheDto.getHouseList().stream()
-                    .map(HouseMarkerResponseDto::getAptSeq)
-                    .toList();
-            List<BookmarkCountDto> bookmarkList = new ArrayList<>();
-            if(!aptSeqList.isEmpty()){
-                bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
-                Map<String, Integer> bookmarkMap = bookmarkList.stream()
-                        .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
-
-                // 데이터 조립
-                cacheDto.getHouseList().forEach(dto -> {
-                    HouseDealAmountInfoResponseDto deal = cacheDto.getDealList().stream()
-                            .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
-                            .findFirst()
-                            .orElse(null);
-                    if (deal != null) {
-                        dto.setAmountAvg(deal.getAmountAvg());
-                        dto.setAmountMax(deal.getAmountMax());
-                        dto.setAmountMin(deal.getAmountMin());
-                    }
-                    Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
-                    dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
-                });
-            }
-            return cacheDto.getHouseList();
-        }
-
-        // 2. 캐시가 없으면 DB 조회
-        List<HouseMarkerResponseDto> list = dao.findAllHousesByDong(sggCd, umdCd);
-        List<String> aptSeqList = list.stream()
-                .map(HouseMarkerResponseDto::getAptSeq)
-                .toList();
-        if(!aptSeqList.isEmpty()){
-            List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
-            List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
-            Map<String, Integer> bookmarkMap = bookmarkList.stream()
-                    .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
-
-            // 데이터 조립
-            list.forEach(dto -> {
-                HouseDealAmountInfoResponseDto deal = dealList.stream()
-                        .filter(d -> d.getAptSeq().equals(dto.getAptSeq()))
-                        .findFirst()
-                        .orElse(null);
-                if (deal != null) {
-                    dto.setAmountAvg(deal.getAmountAvg());
-                    dto.setAmountMax(deal.getAmountMax());
-                    dto.setAmountMin(deal.getAmountMin());
-                }
-                Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
-                dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
-            });
-            // 3. Redis 캐싱
-            LookAroundCacheDto newCacheDto = LookAroundCacheDto.builder()
-                    .houseList(list)
-                    .dealList(dealList)
-                    .build();
-            boolean isCached = redisHouseService.setHouseCache(sggCd, umdCd, newCacheDto);
-            if (isCached) {
-                log.info("###Redis 캐싱 성공: {}", redisKey);
-            } else {
-                log.info("##Redis 캐싱 실패로 DB 데이터만 반환: {}", redisKey);
-            }
-        }
-
-        return list;
-    }
 
     @Override
     public List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat, double minLng, double maxLng) throws SQLException {
@@ -151,12 +70,10 @@ public class HouseServiceImpl implements HouseService {
         List<String> aptSeqList = list.stream()
                 .map(HouseMarkerResponseDto::getAptSeq)
                 .toList();
+        // 위도경도로 검색결과가 있으면
         if (!aptSeqList.isEmpty()) {
+            // 검색결과의 id 리스트로 평균,최고,최저가 검색
             List<HouseDealAmountInfoResponseDto> dealList = dao.findAllHouseDealAvgByAptSeqList(aptSeqList);
-            List<BookmarkCountDto> bookmarkList = dao.findAllBookmarkCountByAptSeqList(aptSeqList);
-            Map<String, Integer> bookmarkMap = bookmarkList.stream()
-                    .collect(Collectors.toMap(BookmarkCountDto::getAptSeq, BookmarkCountDto::getCount));
-
             // 데이터 조립
             list.forEach(dto -> {
                 HouseDealAmountInfoResponseDto deal = dealList.stream()
@@ -168,8 +85,6 @@ public class HouseServiceImpl implements HouseService {
                     dto.setAmountMax(deal.getAmountMax());
                     dto.setAmountMin(deal.getAmountMin());
                 }
-                Integer bookmarkCount = bookmarkMap.get(dto.getAptSeq());
-                dto.setBookMarkCount(bookmarkCount != null ? bookmarkCount : 0);
             });
         }
         return list;

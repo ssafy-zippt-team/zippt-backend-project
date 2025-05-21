@@ -24,13 +24,13 @@ public class DealServiceImpl implements DealService{
     private final DealDao dao;
 
     @Override
-    public PageResponseDto<DealInfoResponseDto> findDealsByCondition( SearchCondition searchCondition) throws SQLException {
-        List <DealInfoResponseDto> list = dao.findDealsByCondition(searchCondition);
-        int totalCount = dao.getDealCount(searchCondition);
+    public PageResponseDto<DealInfoResponseDto> findDealsByCondition(PageRequestDto pageRequestDto, String aptSeq) throws SQLException {
+        List <DealInfoResponseDto> list = dao.findDealsByCondition(pageRequestDto, aptSeq);
+        int totalCount = dao.getDealCount(aptSeq);
         return PageResponseDto.<DealInfoResponseDto> withAll()
                 .dtoList(list)
                 .totalCount(totalCount)
-                .pageRequestDTO(searchCondition)
+                .pageRequestDTO(pageRequestDto)
                 .build();
     }
 

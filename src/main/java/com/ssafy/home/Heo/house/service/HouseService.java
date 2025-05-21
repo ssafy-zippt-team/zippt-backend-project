@@ -17,7 +17,6 @@ public interface HouseService{
 
     PageResponseDto<HouseResponseDto> findHousesByCondition(SearchCondition searchCondition) throws SQLException;
 
-    List<HouseMarkerResponseDto> findAllHousesByDong(String sggCd, String umdCd) throws SQLException;
 
     List<HouseMarkerResponseDto> findHousesByLatLngRange(double minLat, double maxLat,
                                                          double minLng, double maxLng)  throws SQLException;
