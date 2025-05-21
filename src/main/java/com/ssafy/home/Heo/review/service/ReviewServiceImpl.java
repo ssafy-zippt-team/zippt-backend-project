@@ -11,9 +11,11 @@ import com.ssafy.home.Heo.common.base.BaseResponseStatus;
 import com.ssafy.home.Heo.common.exception.BaseException;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
+import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
 import com.ssafy.home.Heo.review.dto.in.ReviewSaveDto;
 import com.ssafy.home.Heo.review.dto.in.ReviewUpdateDto;
 import com.ssafy.home.Heo.review.dto.out.ReviewDetailResponseDto;
+import com.ssafy.home.Heo.review.dto.out.ReviewSimpleResponseDto;
 import com.ssafy.home.Heo.review.repository.ReviewDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +88,25 @@ public class ReviewServiceImpl implements ReviewService {
     public void update(ReviewUpdateDto reviewupdatedto) throws SQLException {
         dao.update(ReviewUpdateDto.from(reviewupdatedto));
     }
-    /*==============================================================
+        /*==============================================================
         리뷰 업데이트 END
     ==============================================================*/
+
+
+    @Override
+    public PageResponseDto<ReviewSimpleResponseDto> getReviewListByAptSeq(PageRequestDto pageRequestDto, String aptSeq) throws SQLException {
+        List<ReviewSimpleResponseDto> list = dao.getReviewListByAptSeq(pageRequestDto, aptSeq);
+        int totalCount = dao.getReviewCountByAptSeq(aptSeq);
+        return PageResponseDto.<ReviewSimpleResponseDto> withAll()
+                .dtoList(list)
+                .totalCount(totalCount)
+                .pageRequestDTO(pageRequestDto)
+                .build();
+    }
+
+    @Override
+    public List<ReviewSimpleResponseDto> getNReviewListByAptSeq(String aptSeq, Integer limit) throws SQLException {
+        return dao.getNReviewListByAptSeq(aptSeq,limit);
+    }
+
 }

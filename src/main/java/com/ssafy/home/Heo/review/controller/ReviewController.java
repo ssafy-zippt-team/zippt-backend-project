@@ -10,10 +10,12 @@ import com.ssafy.home.Heo.common.base.BaseResponse;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
 import com.ssafy.home.Heo.review.dto.out.ReviewDetailResponseDto;
+import com.ssafy.home.Heo.review.dto.out.ReviewSimpleResponseDto;
 import com.ssafy.home.Heo.review.service.ReviewService;
 import com.ssafy.home.Heo.review.vo.in.ReviewSaveVo;
 import com.ssafy.home.Heo.review.vo.in.ReviewUpdateVo;
 import com.ssafy.home.Heo.review.vo.out.ReviewDetailResponseVo;
+import com.ssafy.home.Heo.review.vo.out.ReviewSimpleResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +26,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @Log4j2
@@ -47,6 +52,26 @@ public class ReviewController {
             // 여기 에 추가
     ) throws SQLException {
         return service.getReviewList(pageRequestDto, memberuuid, aptSeq);
+    }
+
+    @Operation(summary = "아파트의 리뷰 조회", description = "맴버별, 아파트별 리뷰 조회")
+    @GetMapping("/{aptSeq}")
+    public PageResponseDto<ReviewSimpleResponseVo> getReviewListByAptSeq(
+            @ParameterObject PageRequestDto pageRequestDto,
+
+            @Parameter(description = "아파트 내부코드", example = "11110-100")
+            @PathVariable(name = "aptSeq")String aptSeq
+
+    ) throws SQLException {
+        PageResponseDto<ReviewSimpleResponseDto> dtoPage =
+                service.getReviewListByAptSeq(pageRequestDto, aptSeq);
+        return PageResponseDto.<ReviewSimpleResponseVo> withAll()
+                .dtoList(dtoPage.getDtoList().stream()
+                        .map(ReviewSimpleResponseDto::from)
+                        .collect(Collectors.toList()))
+                .totalCount(dtoPage.getTotalCount())
+                .pageRequestDTO(dtoPage.getPageRequestDTO())
+                .build();
     }
     /*==============================================================
         리뷰 조회 END
