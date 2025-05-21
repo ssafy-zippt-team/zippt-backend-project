@@ -17,14 +17,15 @@
 		,A.updated_at AS updatedAt
 		FROM  reviews  AS A
 		LEFT OUTER JOIN member AS B ON A.member_uuid = B.member_uuid
-		WHERE A.member_uuid = #{memberUuid}
-		AND A.apt_seq = #{aptSeq}
+		WHERE A.apt_seq = #{aptSeq}
 		ORDER BY A.updated_at DESC
 		LIMIT #{pageRequestDto.size} OFFSET #{pageRequestDto.offset}
 	</select>
 
-	<select id="getReviewListCount" resultType="int">
-		SELECT COUNT(*) FROM reviews
+	<select id="getReviewListCount" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM reviews
+		WHERE apt_seq = #{aptSeq}
 	</select>
 
 	<!--

@@ -37,6 +37,19 @@ public class BookMarkController {
         즐겨찾기 전체 조회 END
     ==============================================================*/
     /*==============================================================
+        즐겨찾기 횟수 조회
+    ==============================================================*/
+    @Operation(summary = "아파트별 즐겨찾기 횟수 조회", description = "아파트별 즐겨찾기 횟수 조회", tags = {"즐겨찾기"})
+    @GetMapping("/getBookmarkCnt/{aptSeq}")
+    public BaseResponse<Integer> getBookmarkCnt(
+            @Parameter(description = "aptSeq", example = "11110-100")
+            @PathVariable(name = "aptSeq")String aptSeq) throws SQLException {
+        return BaseResponse.of(service.getBookmarkCnt(aptSeq));
+    }
+    /*==============================================================
+        즐겨찾기 횟수 조회 END
+    ==============================================================*/
+    /*==============================================================
         즐겨찾기 저장
     ==============================================================*/
     @Operation(summary = "즐겨찾기 저장", description = "즐겨찾기 저장", tags = {"즐겨찾기"})
