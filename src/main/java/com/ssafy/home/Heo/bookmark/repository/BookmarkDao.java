@@ -20,6 +20,8 @@ public interface BookmarkDao {
     void delete(String bookmarkId) throws  SQLException;
     // 즐겨찾기 토글 기능
     void toggleActiveFlag(String bookmarkId) throws SQLException;
+    // 즐겨찾기 횟수
+    Integer getBookmarkCnt(String aptSeq) throws SQLException;
 
     // 즐겨찾기 여부 확인
     boolean checkBoolMark(String aptSeq, String memberUuid) throws SQLException;

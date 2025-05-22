@@ -20,6 +20,7 @@ public interface ReviewService {
     // 회원의 리뷰 조회
     PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException;
 
+
     //리뷰 등록
     public int insert(ReviewSaveDto reviewsavedto) throws SQLException;
     //리뷰 삭제

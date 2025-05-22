@@ -20,7 +20,6 @@ public interface ReviewDao {
 
     // 회원이 쓴 리뷰 조회
     List<ReviewDetailResponseDto> getReviewList(@Param("pageRequestDto") PageRequestDto pageRequestDto,
-                                                @Param("memberUuid") String memberUuid,
                                                 @Param("aptSeq") String aptSeq ) throws SQLException;
 
     // 아파트의 리뷰 카운트
@@ -33,7 +32,7 @@ public interface ReviewDao {
                                                          @Param("limit") Integer limit) throws SQLException;
 
     // 리뷰 조회 cnt 가져오기
-    int getReviewListCount() throws SQLException;
+    int getReviewListCount(String aptSeq) throws SQLException;
 
     // 리뷰 등록
     int insert(ReviewEntity reviewentity) throws SQLException;

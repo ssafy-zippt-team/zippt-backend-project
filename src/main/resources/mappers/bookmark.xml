@@ -27,6 +27,17 @@
 
 	</select>
 	<!--
+		아파트별 북마크 횟수 조회
+	-->
+	<select id="getBookmarkCnt"
+			parameterType="String"
+			resultType="Integer">
+		select count(*)
+		FROM  bookmarks AS A
+		WHERE A.apt_seq = #{aptSeq}
+		AND   A.active_flag = 'Y'
+	</select>
+	<!--
 		저장
 	-->
 	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.BookmarkEntity">
