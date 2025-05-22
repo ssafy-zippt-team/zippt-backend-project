@@ -20,6 +20,7 @@ public class HouseSummaryTool {
     private final DealService dealService;
     private final ReviewService reviewService;
     private final int SIZE = 50;
+
     @Tool(description = "평가 및 요약 대상인 집(아파트)의 최신 거래내역 50건 정보를 반환한다.")
     public List<DealInfoResponseDto> findTopTenLatestDeals(String aptSeq) throws SQLException {
         return dealService.findTopNLatestDeals(aptSeq, SIZE);
