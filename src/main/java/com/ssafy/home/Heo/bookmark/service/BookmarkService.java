@@ -10,13 +10,11 @@ import java.util.List;
 public interface BookmarkService {
     //즐겨찾기 조회
     List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException;
-    //즐겨찾기 등록
-    public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException;
     //즐겨찾기 삭제(토글로 대체)
     public void delete(String bookmarkId) throws SQLException;
 
     //즐겨찾기 flag 토글 기능
-    void toggleActiveFlag(String bookmarkId) throws SQLException;
+    void toggleActiveFlag(String memberUuid,String aptSeq) throws SQLException;
 
     //즐겨찾기 조회
     Integer getBookmarkCnt(String aptSeq) throws SQLException;
