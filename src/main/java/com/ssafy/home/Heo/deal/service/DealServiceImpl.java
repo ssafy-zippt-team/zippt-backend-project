@@ -3,6 +3,7 @@ package com.ssafy.home.Heo.deal.service;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
 import com.ssafy.home.Heo.deal.condition.SearchCondition;
+import com.ssafy.home.Heo.deal.dto.out.DealAmountStatResponseDto;
 import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
 import com.ssafy.home.Heo.deal.entity.DealEntity;
 import com.ssafy.home.Heo.deal.reposiitory.DealDao;
@@ -40,6 +41,15 @@ public class DealServiceImpl implements DealService{
 
         return dao.findTopTenLatestDeals(aptSeq,limit);
     }
-
+    // 당해 광역시별 매물 평균가격 조회
+    @Override
+    public DealAmountStatResponseDto amountStatResponseList () throws SQLException {
+        return dao.amountStatResponseList();
+    }
+    // 당해 광역시별 매물 거래량 조회
+    @Override
+    public DealAmountStatResponseDto amountStatCntResponseList () throws SQLException {
+        return dao.amountStatCntResponseList();
+    }
 
 }

@@ -4,8 +4,10 @@ import com.ssafy.home.Heo.common.base.BaseResponse;
 import com.ssafy.home.Heo.common.page.PageRequestDto;
 import com.ssafy.home.Heo.common.page.PageResponseDto;
 import com.ssafy.home.Heo.deal.condition.SearchCondition;
+import com.ssafy.home.Heo.deal.dto.out.DealAmountStatResponseDto;
 import com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto;
 import com.ssafy.home.Heo.deal.service.DealService;
+import com.ssafy.home.Heo.deal.vo.DealAmountStatResponseVo;
 import com.ssafy.home.Heo.deal.vo.DealInfoResponseVo;
 import com.ssafy.home.Heo.house.dto.out.HouseDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,6 +63,22 @@ public class DealController {
                 dealService.findTopNLatestDeals(aptSeq,limit)
                         .stream().map(DealInfoResponseDto::from).collect(Collectors.toList())
         );
+    }
+
+    @Operation(summary = "당해 광역시별 매물 평균가격 조회",
+            description = "당해 광역시별 매물 평균가격 조회", tags = {"거래내역"})
+    @GetMapping("/amountStatResponseList")
+    public BaseResponse<DealAmountStatResponseVo>amountStatResponseList() throws SQLException {
+        DealAmountStatResponseDto dto = dealService.amountStatResponseList();
+        return  BaseResponse.of(dto.from(dto));
+    }
+
+    @Operation(summary = "당해 광역시별 매물 거래량 조회",
+            description = "당해 광역시별 매물 거래량 조회", tags = {"거래내역"})
+    @GetMapping("/amountStatCntResponseList")
+    public BaseResponse<DealAmountStatResponseVo>amountStatCntResponseList() throws SQLException {
+        DealAmountStatResponseDto dto = dealService.amountStatCntResponseList();
+        return  BaseResponse.of(dto.from(dto));
     }
 
 }
