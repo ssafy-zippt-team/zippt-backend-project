@@ -20,10 +20,15 @@ public interface ReviewDao {
 
     // 회원이 쓴 리뷰 조회
     List<ReviewDetailResponseDto> getReviewList(@Param("pageRequestDto") PageRequestDto pageRequestDto,
+                                                @Param("memberUuid") String memberUuid ,
                                                 @Param("aptSeq") String aptSeq ) throws SQLException;
 
     // 아파트의 리뷰 카운트
+    int getReviewCountByMemberandAptSeq(@Param("memberUuid") String memberUuid , @Param("aptSeq") String aptSeq) throws SQLException;
+
+    // 아파트의 리뷰 카운트
     int getReviewCountByAptSeq(@Param("aptSeq") String aptSeq) throws SQLException;
+
     // 아파트의 리뷰 조회
     List<ReviewSimpleResponseDto> getReviewListByAptSeq(@Param("pageRequestDto") PageRequestDto pageRequestDto,
                                                         @Param("aptSeq") String aptSeq) throws SQLException;
