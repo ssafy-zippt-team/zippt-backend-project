@@ -13,11 +13,16 @@ public class AiConfig {
     @Value("${spring.ai.system-prompt}")
     String systemPrompt;
 
+    @Bean
+    ChatClient simpleChatClient(ChatClient.Builder builder) {
+        return builder.defaultSystem(systemPrompt)
+                .defaultAdvisors(new SimpleLoggerAdvisor(Ordered.LOWEST_PRECEDENCE - 1))
+                .build();
+    }
 
     /**
      * SimpleLoggerAdvisor와 ReReadingAdvisor를 적용한 ChatClient를 생성
      */
-
     @Bean
     ChatClient reReadingChatClient(ChatClient.Builder builder) {
         return builder.defaultSystem(systemPrompt)

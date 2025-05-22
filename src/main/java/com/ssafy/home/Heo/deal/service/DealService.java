@@ -12,6 +12,6 @@ import java.util.List;
 public interface DealService {
     PageResponseDto<DealInfoResponseDto> findDealsByCondition(PageRequestDto dto , String aptSeq) throws SQLException;
 
-    // aptSeq로 최신 거래내역 10건 조회
-    List<DealInfoResponseDto> findTopTenLatestDeals (String aptSeq, Integer limit) throws  SQLException;
+    // aptSeq로 최신 거래내역 n건 조회
+    List<DealInfoResponseDto> findTopNLatestDeals (String aptSeq, Integer limit) throws  SQLException;
 }

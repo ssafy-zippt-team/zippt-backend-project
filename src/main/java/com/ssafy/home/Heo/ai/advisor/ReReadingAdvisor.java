@@ -7,7 +7,6 @@ import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
 
 import java.util.Map;
 
-// TODO: 06-2. CallAroundAdvisor를 구현한 ReReadingAdvisor를 생성해보자.
 //  https://docs.spring.io/spring-ai/reference/1.0/api/advisors.html#_re_reading_re2_advisor
 public class ReReadingAdvisor implements CallAroundAdvisor {
 
@@ -29,7 +28,7 @@ public class ReReadingAdvisor implements CallAroundAdvisor {
 
     @Override
     public AdvisedResponse aroundCall(AdvisedRequest advisedRequest, CallAroundAdvisorChain chain) {
-        // 호출 전에 한번 더 읽어서 처리하기
+        // 호출 전에 한번 더 읽어서 처리
         return chain.nextAroundCall(before(advisedRequest));
     }
 

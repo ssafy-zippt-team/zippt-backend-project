@@ -5,7 +5,7 @@
 <mapper namespace="com.ssafy.home.Heo.review.repository.ReviewDao">
 
 	<!--
-	    조회
+	    회원의 리뷰 조회
 	-->
 	<select id="getReviewList" parameterType="map"   resultType="com.ssafy.home.Heo.review.dto.out.ReviewDetailResponseDto">
 		select
@@ -54,4 +54,40 @@
 	</update>
 
 
+	<!--아파트의 리뷰 조회 페이지네이션-->
+	<select id="getReviewListByAptSeq"
+			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
+			resultType="com.ssafy.home.Heo.review.dto.out.ReviewSimpleResponseDto">
+		select
+			mb.name        AS memberName,
+			rv.content     AS content,
+			rv.updated_at  AS updatedAt
+		FROM  reviews   AS rv
+		JOIN  member 	AS mb
+		ON 	  rv.member_uuid = mb.member_uuid
+		WHERE rv.apt_seq = #{aptSeq}
+		ORDER BY rv.updated_at DESC
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+	<select id="getReviewCountByAptSeq" resultType="int">
+		SELECT COUNT(*)
+		FROM  reviews   AS rv
+		JOIN  member 	AS mb
+		ON 	  rv.member_uuid = mb.member_uuid
+		WHERE rv.apt_seq = #{aptSeq}
+	</select>
+
+	<!--아파트의 리뷰 조회 n개만 가져오기-->
+	<select id="getNReviewListByAptSeq" parameterType="map"   resultType="com.ssafy.home.Heo.review.dto.out.ReviewSimpleResponseDto">
+		select
+			mb.name        AS memberName,
+			rv.content     AS content,
+			rv.updated_at  AS updatedAt
+		FROM  reviews   AS rv
+		JOIN  member 	AS mb
+		ON 	  rv.member_uuid = mb.member_uuid
+		WHERE rv.apt_seq = #{aptSeq}
+		ORDER BY rv.updated_at DESC
+		LIMIT #{limit}
+	</select>
 </mapper>

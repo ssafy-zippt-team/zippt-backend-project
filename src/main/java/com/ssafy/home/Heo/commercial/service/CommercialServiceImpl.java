@@ -9,6 +9,7 @@ import com.ssafy.home.Heo.commercial.dto.out.CommercialResponseStoreDto;
 import com.ssafy.home.Heo.commercial.entity.CommercialEntity;
 import com.ssafy.home.Heo.commercial.entity.RadiusEntity;
 import com.ssafy.home.Heo.config.CommercialApiConfig;
+import io.lettuce.core.output.ListOfGenericMapsOutput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,7 @@ public class CommercialServiceImpl implements CommercialService {
 
         // API 호출
         CommercialEntity response = restTemplate.getForObject(uri, CommercialEntity.class);
+        log.warn(String.valueOf(response));
 
         log.info("✅ 응답 Entity: {}", response);
         if (response != null && response.getBody() != null && response.getBody().getStoreList() != null) {
