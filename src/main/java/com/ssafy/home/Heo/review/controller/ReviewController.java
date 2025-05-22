@@ -35,16 +35,16 @@ public class ReviewController {
         리뷰 조회
     ==============================================================*/
     @Operation(summary = "리뷰 조회", description = "맴버별, 아파트별 리뷰 조회", tags = {"리뷰"})
-    @GetMapping("/{memberUuid}/{aptSeq}")
+    @GetMapping("/{aptSeq}")
     public PageResponseDto<ReviewDetailResponseDto> list(
-            @Parameter(description = "맴버 UUID", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")
-            @PathVariable(name = "memberUuid")String memberuuid,
+//            @Parameter(description = "맴버 UUID", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")
+//            @PathVariable(name = "memberUuid")String memberuuid,
             @Parameter(description = "아파트 내부코드", example = "11110-100")
             @PathVariable(name = "aptSeq")String aptSeq,
             @ParameterObject PageRequestDto pageRequestDto
             // 여기 에 추가
     ) throws SQLException {
-        return service.getReviewList(pageRequestDto, memberuuid, aptSeq);
+        return service.getReviewList(pageRequestDto, aptSeq);
     }
     /*==============================================================
         리뷰 조회 END

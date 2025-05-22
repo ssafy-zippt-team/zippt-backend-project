@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public interface ReviewService {
 
     //리뷰 조회
-    PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException;
+    PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String aptSeq) throws SQLException;
 
     //리뷰 등록
     public int insert(ReviewSaveDto reviewsavedto) throws SQLException;
