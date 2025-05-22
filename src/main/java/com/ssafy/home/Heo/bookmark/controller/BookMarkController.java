@@ -50,19 +50,6 @@ public class BookMarkController {
         즐겨찾기 횟수 조회 END
     ==============================================================*/
     /*==============================================================
-        즐겨찾기 저장
-    ==============================================================*/
-    @Operation(summary = "즐겨찾기 저장", description = "즐겨찾기 저장", tags = {"즐겨찾기"})
-    @PostMapping("/")
-    public BaseResponse<String> insert(@ParameterObject BookmarkSaveVo bookmarksavevo) throws SQLException {
-        System.out.println("Insert 객체 받아오기 bookmark = " + bookmarksavevo);
-        service.insert(bookmarksavevo.from(bookmarksavevo));
-        return BaseResponse.of("즐겨찾기 저장에 성공하였습니다.");
-    }
-    /*==============================================================
-        즐겨찾기 저장 END
-    ==============================================================*/
-    /*==============================================================
         즐겨찾기 삭제 (토글기능 도입으로 사용안함)
     ==============================================================*/
     @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 삭제(토글기능 도입으로 사용안함)", tags = {"즐겨찾기"})
@@ -82,9 +69,14 @@ public class BookMarkController {
         즐겨찾기 토글
     ==============================================================*/
     @Operation(summary = "즐겨찾기 토글", description = "즐겨찾기 토글(삭제,삽입시 활성화)", tags = {"즐겨찾기"})
-    @PatchMapping("/toggle/{bookmarkId}")
-    public BaseResponse<String> toggle(@PathVariable String bookmarkId) throws SQLException {
-        service.toggleActiveFlag(bookmarkId);
+    @PatchMapping("/toggle/{memberUuid}/{aptSeq}")
+    public BaseResponse<String> toggle(
+            @Parameter(description = "memberUuid", example = "9ed7aacf-2b04-11f0-a5b7-0242ac110002", required = true)
+            @ParameterObject String memberUuid,
+            @Parameter(description = "aptSeq", example = "11110-100", required = true)
+            @ParameterObject String aptSeq
+            ) throws SQLException {
+        service.toggleActiveFlag(memberUuid,aptSeq);
         return BaseResponse.of("즐겨찾기 토글 성공하였습니다.");
     }
     /*==============================================================

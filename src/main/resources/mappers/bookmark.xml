@@ -38,9 +38,20 @@
 		AND   A.active_flag = 'Y'
 	</select>
 	<!--
+		토글기능 전 테이블 체크
+	-->
+	<select id="isExistsReview"
+			parameterType="String"
+			resultType="Integer">
+		select count(*)
+		FROM  bookmarks AS A
+		WHERE A.apt_seq = #{aptSeq}
+		AND A.member_uuid = #{memberUuid}
+	</select>
+	<!--
 		저장
 	-->
-	<insert id="insert" parameterType="com.ssafy.home.Heo.bookmark.entity.BookmarkEntity">
+	<insert id="insert" parameterType="map">
 		INSERT INTO bookmarks (member_uuid,apt_Seq, created_at, updated_at)
 		VALUES (#{memberUuid}, #{aptSeq}, NOW(), NOW())
 	</insert>
@@ -55,11 +66,12 @@
 	<!--
 		토글
 	-->
-	<update id="toggleActiveFlag" parameterType="String">
+	<update id="toggleActiveFlag" parameterType="map">
 		UPDATE bookmarks
 		SET active_flag = CASE active_flag WHEN 'Y' THEN 'N' ELSE 'Y' END,
 		updated_at = NOW()
-		WHERE bookmark_id = #{bookmarkId}
+		WHERE apt_seq = #{aptSeq}
+		AND member_uuid = #{memberUuid}
 	</update>
   <!--
             즐겨찾기 여부 조회

@@ -39,16 +39,6 @@ public class BookmarkServiceImpl implements BookmarkService {
       즐겨찾기 횟수 조회 END
     ==============================================================*/
     /*==============================================================
-      즐겨찾기 등록
-    ==============================================================*/
-    @Override
-    public void insert(BookmarkSaveDto bookmarkSaveDto) throws SQLException {
-        dao.insert(BookmarkSaveDto.from(bookmarkSaveDto));
-    }
-    /*==============================================================
-       즐겨찾기 등록 END
-     ==============================================================*/
-    /*==============================================================
         즐겨찾기 삭제
     ==============================================================*/
     @Override
@@ -66,8 +56,20 @@ public class BookmarkServiceImpl implements BookmarkService {
     /*==============================================================
         즐겨찾기 토글
     ==============================================================*/
-    public void toggleActiveFlag(String bookmarkId) throws SQLException {
-        dao.toggleActiveFlag(bookmarkId);
+    public void toggleActiveFlag(String memberUuid, String aptSeq) throws SQLException {
+        int cnt = dao.isExistsReview(memberUuid,aptSeq);
+        System.out.println("memberUuid = " + memberUuid + ", aptSeq = " + aptSeq);
+        System.out.println("cnt : " + cnt);
+
+        // 존재를 하면 토글기능
+        if (cnt > 0){
+            System.out.println("존재함 : toggle" );
+            dao.toggleActiveFlag(memberUuid,aptSeq);
+        }else{
+            System.out.println("존재하지 않아서 : insert" );
+            // 없으면 밀어넣어주기
+            dao.insert(memberUuid,aptSeq);
+        }
     }
     /*==============================================================
         즐겨찾기 토글 END
