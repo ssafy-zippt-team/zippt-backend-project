@@ -20,9 +20,9 @@ public class PageResponseDto<E> {
         this.pageRequestDTO = pageRequestDTO;
         this.totalCount = (int)totalCount;
         // 현재 페이지가 속한 10개 단위 블록의 끝 페이지 계산 (ex. 1~10, 11~20)
-        int end =   (int)(Math.ceil( pageRequestDTO.getPage() / 10.0 )) *  10;
+        int end =   (int)(Math.ceil( pageRequestDTO.getPage() / 10.0 )) *  5; // 페이지번호 10개로 하려면 * 5
         // 해당 블록의 시작 페이지 계산
-        int start = end - 9;
+        int start = end - 4; // 페이지번호 10개로 하려면 - 9
         // 실제 전체 페이지 수 계산
         int last =  (int)(Math.ceil((totalCount/(double)pageRequestDTO.getSize())));
         // 블록의 끝 페이지는 전체 페이지 수를 넘을 수 없음
