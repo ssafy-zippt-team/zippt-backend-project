@@ -64,7 +64,7 @@
 
 	<!--아파트의 리뷰 조회 페이지네이션-->
 	<select id="getReviewListByAptSeq"
-			parameterType="com.ssafy.home.Heo.common.page.PageRequestDto"
+			parameterType="map"
 			resultType="com.ssafy.home.Heo.review.dto.out.ReviewSimpleResponseDto">
 		select
 			mb.name        AS memberName,
@@ -75,7 +75,7 @@
 		ON 	  rv.member_uuid = mb.member_uuid
 		WHERE rv.apt_seq = #{aptSeq}
 		ORDER BY rv.updated_at DESC
-		LIMIT #{size} OFFSET #{offset}
+		LIMIT #{pageRequestDto.size} OFFSET #{pageRequestDto.offset}
 	</select>
 	<select id="getReviewCountByAptSeq" resultType="int">
 		SELECT COUNT(*)
