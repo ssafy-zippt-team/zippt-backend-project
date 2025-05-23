@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
+@Log4j2
 public class JWTUtil {
 
     private SecretKey secretKey;
@@ -31,7 +33,7 @@ public class JWTUtil {
     @Value("${jwt.refresh.expired-ms}") private long refreshExpiredMs;
 
     public JWTUtil(@Value("${spring.jwt.secret}")String secret) {
-
+        log.info("secret : " + secret);
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 //    public JWTUtil(@Value("${spring.jwt.secret}") String base64Secret) {
