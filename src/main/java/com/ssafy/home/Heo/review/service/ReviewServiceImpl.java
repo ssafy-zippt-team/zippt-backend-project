@@ -36,15 +36,15 @@ public class ReviewServiceImpl implements ReviewService {
       리뷰 상세 조회
     ==============================================================*/
     @Override
-    public PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String aptSeq) throws SQLException {
+    public PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException {
 //        log.info("aptSeq = {}", aptSeq);
 //        log.info("memberUuid = {}", memberUuid);
 //        log.info("offset = {}", pageRequestDto.getOffset());
 //        log.info("size = {}", pageRequestDto.getSize());
-        List<ReviewDetailResponseDto> list = dao.getReviewList(pageRequestDto,aptSeq);
+        List<ReviewDetailResponseDto> list = dao.getReviewList(pageRequestDto, memberUuid ,aptSeq);
         log.info("list = {}", list);
         // 2. 전체 개수 조회
-        int totalCount = dao.getReviewListCount(aptSeq);
+        int totalCount = dao.getReviewCountByMemberandAptSeq(memberUuid,aptSeq);
         log.info("total = "+totalCount);
         System.out.println("totalCount = " + totalCount);
         // 3. 응답 조립

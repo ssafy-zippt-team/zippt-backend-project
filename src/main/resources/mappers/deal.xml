@@ -11,6 +11,7 @@
 		FROM housedeals hd
 		WHERE hd.apt_seq = #{aptSeq}
 	</select>
+
 	<select id="findDealsByCondition"
 			parameterType="map"
 			resultType="com.ssafy.home.Heo.deal.dto.out.DealInfoResponseDto">
@@ -25,6 +26,37 @@
 		LIMIT #{pageRequest.size} OFFSET #{pageRequest.offset}
 	</select>
 
+	<!-- 당해 광역시별 매물 평균가격 조회-->
+	<select id="amountStatResponseList"
+			resultType="com.ssafy.home.Heo.deal.dto.out.DealAmountStatResponseDto">
+		SELECT
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '11' THEN A.deal_amount END) AS seoul,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '26' THEN A.deal_amount END) AS busan,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '31' THEN A.deal_amount END) AS ulsan,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '27' THEN A.deal_amount END) AS daegu,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '28' THEN A.deal_amount END) AS incheon,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '29' THEN A.deal_amount END) AS gwangju,
+		AVG(CASE WHEN LEFT(A.apt_seq, 2) = '30' THEN A.deal_amount END) AS daejeon
+		FROM housedeals AS A
+		WHERE A.deal_year = YEAR(NOW())
+		AND LEFT(A.apt_seq, 2) IN ('11', '26', '31', '27', '28', '29', '30');
+	</select>
+
+	<!-- 당해 광역시별 매물 거래량 조회-->
+	<select id="amountStatCntResponseList"
+			resultType="com.ssafy.home.Heo.deal.dto.out.DealAmountStatResponseDto">
+		SELECT
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '11' THEN 1 END) AS seoul,     -- 서울
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '26' THEN 1 END) AS busan,     -- 부산
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '31' THEN 1 END) AS ulsan,     -- 울산
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '27' THEN 1 END) AS daegu,     -- 대구
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '28' THEN 1 END) AS incheon,   -- 인천
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '29' THEN 1 END) AS gwangju,   -- 광주
+		COUNT(CASE WHEN LEFT(A.apt_seq, 2) = '30' THEN 1 END) AS daejeon    -- 대전
+		FROM housedeals AS A
+		WHERE A.deal_year = YEAR(NOW())
+		AND LEFT(A.apt_seq, 2) IN ('11', '26', '31', '27', '28', '29', '30');
+	</select>
 
 	<!--최근 거래내역 조회-->
 	<select id="findTopTenLatestDeals"

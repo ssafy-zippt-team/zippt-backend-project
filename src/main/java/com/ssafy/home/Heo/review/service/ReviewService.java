@@ -18,7 +18,7 @@ import java.util.List;
 public interface ReviewService {
 
     // 회원의 리뷰 조회
-    PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String memberUuid, String aptSeq) throws SQLException;
+    PageResponseDto<ReviewDetailResponseDto> getReviewList(PageRequestDto pageRequestDto, String member_Uuid, String aptSeq) throws SQLException;
 
 
     //리뷰 등록
