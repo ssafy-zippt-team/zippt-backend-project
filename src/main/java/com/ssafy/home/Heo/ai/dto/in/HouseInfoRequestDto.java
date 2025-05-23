@@ -1,12 +1,10 @@
 package com.ssafy.home.Heo.ai.dto.in;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter
+@ToString
 public class HouseInfoRequestDto {
     private String umdNm; // 동 이름
     private String roadNm; // 도로명
