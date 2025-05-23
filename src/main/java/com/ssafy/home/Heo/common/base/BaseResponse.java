@@ -6,7 +6,6 @@ import static com.ssafy.home.Heo.common.base.BaseResponseStatus.SUCCESS;
 
 
 public record BaseResponse<T>(HttpStatusCode httpStatus, Boolean isSuccess, String message, int code, T result) {
-
     /**
      * 필요값 : Http상태코드, 성공여부, 메시지, 에러코드, 결과값
      * 1. Return 객체가 필요한 경우 -> 성공

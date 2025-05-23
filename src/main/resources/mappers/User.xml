@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.security.repository.UserDao">
+
+    <resultMap id="userEntityMap" type="com.ssafy.home.Heo.security.entity.UserEntity">
+        <id property="id" column="member_id"/>
+        <result property="uuid"  column="member_uuid"/>
+        <result property="nickname"    column="name"/>
+        <result property="username"    column="membername"/>
+        <result property="userEmail"   column="email"/>
+        <result property="password"    column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="role"        column="role"/>
+    </resultMap>
+
+    <select id="existsByUsername" parameterType="String" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE name = #{username}
+    </select>
+
+    <select id="findByUsername" parameterType="String" resultType="com.ssafy.home.Heo.security.entity.UserEntity">
+        select member_id, member_uuid, name, password, role
+        from member
+        where name = #{username}
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultType="com.ssafy.home.Heo.security.entity.UserEntity">
+        select member_id, member_uuid, name, password, role
+        from member
+        where member_id = #{userId}
+    </select>
+
+    <select id="findByUserEmail" parameterType="String" resultMap="userEntityMap">
+        select member_id, member_uuid, name, email, password, role
+        from member
+        where email = #{userEmail}
+    </select>
+
+    <select id="findByUuid" parameterType="String" resultMap="userEntityMap">
+        select member_id, member_uuid, name, email, password, role
+        from member
+        where member_uuid = #{uuid}
+    </select>
+
+    <insert id="registUser" parameterType="com.ssafy.home.Heo.security.entity.UserEntity">
+        INSERT INTO member (member_uuid, name, membername, password, email, phone_number, role)
+        VALUES (UUID(), #{nickname}, #{username}, #{password}, #{userEmail}, #{phoneNumber}, "ROLE_USER")
+    </insert>
+</mapper>

@@ -26,7 +26,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api/Commercials")
+@RequestMapping("/api/v1/Commercials")
 public class CommercialController {
 
     private final CommercialService service;
