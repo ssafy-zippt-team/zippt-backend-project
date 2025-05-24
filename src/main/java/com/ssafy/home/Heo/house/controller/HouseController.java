@@ -49,9 +49,6 @@ public class HouseController {
         );
     }
 
-    /**
-     *  거래내역 리스트 필터링[시군구코드, 읍면동코드]  , 정렬조건[최신순,오래된순,높은가격,낮은가격]
-     */
     @Operation(summary = "아파트 리스트 조회 [필터링, 정렬] 페이지네이션 ",
             description = "필터링[시군구코드+읍면동코드] 정렬[준공년도, 북마크(미구현) ]")
     @GetMapping("/condition-list")

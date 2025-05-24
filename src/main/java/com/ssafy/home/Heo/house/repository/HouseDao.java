@@ -4,6 +4,7 @@ import com.ssafy.home.Heo.common.page.PageRequestDto;
 
 import com.ssafy.home.Heo.house.condition.SearchCondition;
 import com.ssafy.home.Heo.house.dto.out.BookmarkCountDto;
+import com.ssafy.home.Heo.house.dto.out.HouseAmountResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseDealAmountInfoResponseDto;
 import com.ssafy.home.Heo.house.dto.out.HouseMarkerResponseDto;
 import com.ssafy.home.Heo.house.entity.HouseEntity;
@@ -17,6 +18,8 @@ import java.util.List;
 @Repository
 public interface HouseDao {
     HouseEntity findHouseByAptSeq(String aptSeq) throws SQLException;
+
+    HouseAmountResponseDto findHouseAmountByAptSeq(String aptSeq) throws SQLException;
 
     int getHouseListCount() throws SQLException;
     List<HouseEntity> getHouseList(PageRequestDto pageRequestDto) throws SQLException;
