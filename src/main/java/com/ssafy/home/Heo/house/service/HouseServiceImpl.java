@@ -31,7 +31,11 @@ public class HouseServiceImpl implements HouseService {
     public HouseDetailResponseDto findHouseByAptSeq(String aptSeq) throws SQLException {
         HouseEntity entity = dao.findHouseByAptSeq(aptSeq);
         if(entity == null) throw new BaseException(BaseResponseStatus.NO_EXIST_HOUSE);
-        return HouseDetailResponseDto.from(entity);
+
+        // 아파트 가격 정보
+        HouseAmountResponseDto houseAmountResponseDto = dao.findHouseAmountByAptSeq(aptSeq);
+
+        return HouseDetailResponseDto.of(entity,houseAmountResponseDto);
     }
 
     @Override

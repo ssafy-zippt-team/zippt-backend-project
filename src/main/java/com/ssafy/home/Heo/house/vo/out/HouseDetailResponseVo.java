@@ -12,5 +12,11 @@ public class HouseDetailResponseVo {
     private String roadNmBubun; // 도로명추가번호
     private int buildYear; // 준공년도
 
+    private float amountAvg;
+    private float amountMax;
+    private float amountMin;
+
+
+
 
 }

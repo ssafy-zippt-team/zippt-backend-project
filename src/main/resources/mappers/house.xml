@@ -151,5 +151,14 @@
 		AND longitude BETWEEN #{minLng} AND #{maxLng}
 	</select>
 
-
+	<select id="findHouseAmountByAptSeq"
+			parameterType="string"
+			resultType="com.ssafy.home.Heo.house.dto.out.HouseAmountResponseDto">
+		SELECT
+		ROUND(AVG(deal_amount) / 10000.0, 2) AS amountAvg,
+		ROUND(MAX(deal_amount) / 10000.0, 2) AS amountMax,
+		ROUND(MIN(deal_amount) / 10000.0, 2) AS amountMin
+		FROM housedeals
+		WHERE apt_seq = #{aptSeq}
+	</select>
 </mapper>

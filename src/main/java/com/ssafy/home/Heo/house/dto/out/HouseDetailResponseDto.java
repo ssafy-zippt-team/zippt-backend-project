@@ -16,6 +16,9 @@ public class HouseDetailResponseDto {
     private String roadNmBubun; // 도로명추가번호
     private int buildYear; // 준공년도
 
+    private float amountAvg;
+    private float amountMax;
+    private float amountMin;
 
     // dto -> vo
     public static HouseDetailResponseVo from (HouseDetailResponseDto dto){
@@ -25,17 +28,23 @@ public class HouseDetailResponseDto {
                 .roadNmBonbun(dto.getRoadNmBonbun())
                 .roadNmBubun(dto.getRoadNmBubun())
                 .buildYear(dto.getBuildYear())
+                .amountMax(dto.getAmountMax())
+                .amountMin(dto.getAmountMin())
+                .amountAvg(dto.getAmountAvg())
                 .build();
     }
 
     // entity -> dto
-    public static HouseDetailResponseDto from (HouseEntity entity) {
+    public static HouseDetailResponseDto of (HouseEntity entity, HouseAmountResponseDto houseAmountResponseDto) {
         return HouseDetailResponseDto.builder()
                 .jibun(entity.getJibun())
                 .roadNm(entity.getRoadNm())
                 .roadNmBonbun(entity.getRoadNmBonbun())
                 .roadNmBubun(entity.getRoadNmBubun())
                 .buildYear(entity.getBuildYear())
+                .amountMax(houseAmountResponseDto.getAmountMax())
+                .amountMin(houseAmountResponseDto.getAmountMin())
+                .amountAvg(houseAmountResponseDto.getAmountAvg())
                 .build();
 
     }
