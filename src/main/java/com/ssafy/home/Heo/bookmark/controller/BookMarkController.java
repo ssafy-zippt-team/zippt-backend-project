@@ -71,10 +71,12 @@ public class BookMarkController {
     @Operation(summary = "즐겨찾기 토글", description = "즐겨찾기 토글(삭제,삽입시 활성화)", tags = {"즐겨찾기"})
     @PatchMapping("/toggle/{memberUuid}/{aptSeq}")
     public BaseResponse<String> toggle(
-            @Parameter(description = "memberUuid", example = "9ed7aacf-2b04-11f0-a5b7-0242ac110002", required = true)
-            @ParameterObject String memberUuid,
-            @Parameter(description = "aptSeq", example = "11110-100", required = true)
-            @ParameterObject String aptSeq
+            @PathVariable String memberUuid,
+            @PathVariable String aptSeq
+            // @Parameter(description = "memberUuid", example = "9ed7aacf-2b04-11f0-a5b7-0242ac110002", required = true)
+            // @ParameterObject String memberUuid,
+            // @Parameter(description = "aptSeq", example = "11110-100", required = true)
+            // @ParameterObject String aptSeq
             ) throws SQLException {
         service.toggleActiveFlag(memberUuid,aptSeq);
         return BaseResponse.of("즐겨찾기 토글 성공하였습니다.");
