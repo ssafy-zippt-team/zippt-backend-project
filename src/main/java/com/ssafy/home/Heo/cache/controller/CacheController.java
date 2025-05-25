@@ -31,7 +31,7 @@ public class CacheController {
     @Operation(summary = "최근 검색어 등록", description = "최근 검색어 등록")
     @PostMapping("/search/word")
     public BaseResponse<Void> addSearchWordV1(
-            @AuthenticationPrincipal CustomUserDetails user,  @RequestParam String searchWord ){
+            @AuthenticationPrincipal CustomUserDetails user, @RequestBody String searchWord ){
         redisService.addSearchWord(user.getUserUuid(), searchWord);
         return BaseResponse.ok();
     }
@@ -47,16 +47,19 @@ public class CacheController {
                 );
     }
     @Operation(summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제")
-    @DeleteMapping("/search/word")
+    @DeleteMapping("/search/word/{searchWord}")
     public BaseResponse<Void> deleteSearchWordV1(
-            @AuthenticationPrincipal CustomUserDetails user ,@RequestParam String searchWord ){
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable String searchWord
+    ) {
         redisService.deleteSearchWord(user.getUserUuid(), searchWord);
         return BaseResponse.ok();
     }
     @Operation(summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제")
-    @DeleteMapping("/search/word/all")
+    @DeleteMapping("/search/words")
     public BaseResponse<Void> deleteUserSearchKeyV1(
-            @AuthenticationPrincipal CustomUserDetails user){
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
         redisService.deleteUserSearchKey(user.getUserUuid());
         return BaseResponse.ok();
     }
@@ -65,17 +68,17 @@ public class CacheController {
      *  최근 본 아파트
      */
     @Operation(summary = "최근 본 아파트 추가", description = "회원의 최근 본 아파트 추가")
-    @PostMapping("/recent-view-house")
+    @PostMapping("/recent-view-houses")
     public BaseResponse<Void> addRecentViewHouse(
-            @ParameterObject RecentViewHouseResponseVo vo,
-            @AuthenticationPrincipal CustomUserDetails user
+            @RequestBody RecentViewHouseResponseVo vo,
+            @AuthenticationPrincipal  CustomUserDetails user
     ) {
         // memberUuid 추출
         redisService.addRecentViewHouse(user.getUserUuid(), RecentViewHouseResponseDto.from(vo));
         return BaseResponse.ok();
     }
     @Operation(summary = "최근 본 아파트 조회", description = "회원의 최근 본 아파트 조회")
-    @GetMapping("/recent-view-house")
+    @GetMapping("/recent-view-houses")
     public BaseResponse<List<RecentViewHouseResponseVo>> getRecentViewHouseList(
             @AuthenticationPrincipal CustomUserDetails user
     ) {
