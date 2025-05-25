@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.home.Heo.member.repository.MemberDao">
+
+
+    <select id="getMember"
+            parameterType="String"
+            resultType="com.ssafy.home.Heo.member.dto.out.MemberResponseDto">
+        select  0 			   		AS adressSeq
+        ,name
+        ,membername				    AS memberName
+        ,email
+        ,phone_number 			    AS phoneNumber
+        ,created_at 				    AS createdAt
+        FROM member
+        WHERE member_uuid = #{memberUuid}
+    </select>
+
+    <update id="memberUpdate" parameterType="com.ssafy.home.Heo.member.dto.in.MemberRequestDto">
+        UPDATE member
+        SET membername = #{memberName},
+        email = #{email},
+        phone_number = #{phoneNumber}
+        WHERE member_uuid = #{memberUuid}
+    </update>
+
+
+</mapper>
