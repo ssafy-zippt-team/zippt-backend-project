@@ -2,6 +2,7 @@ package com.ssafy.home.Heo.cache.service;
 
 
 import com.ssafy.home.Heo.cache.dto.out.RecentSearchResponseDto;
+import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.SearchWordDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,15 +21,19 @@ import java.util.concurrent.TimeUnit;
 public class RedisServiceImpl implements  RedisService{
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, RecentViewHouseResponseDto> recentViewHouseRedisTemplate;
 
     // 회원의 최대 저장가능한 최근검색어 개수
     private static final int MAX_RECENT_SEARCHES = 5;
+    // 회원의 최대 저장가능한 최근 본 아파트 개수
+    private static final int MAX_RECENT_VIEW_HOUSE = 6;
 
     @Override
     public void addSearchWord(String memberUuid, String searchWord) {
         String key = "search:" + memberUuid;
         ListOperations<String, String> listOps = redisTemplate.opsForList();
-
+        // 기존 동일 검색어 삭제 (중복 방지)
+        listOps.remove(key, 0, searchWord);
         // 가장 앞에 검색어 추가
         listOps.leftPush(key, searchWord);
 
@@ -77,6 +82,38 @@ public class RedisServiceImpl implements  RedisService{
             }
         }
         return searchWordDetails;
+    }
+
+    // 최근 본 아파트 추가 (중복 제거, 6개 제한)
+    @Override
+    public void addRecentViewHouse(String memberUuid, RecentViewHouseResponseDto dto) {
+        String key = "recent:view:house:" + memberUuid;
+        ListOperations<String, RecentViewHouseResponseDto> listOps = recentViewHouseRedisTemplate.opsForList();
+        // 기존 동일 아파트 제거(중복 방지)
+        listOps.remove(key, 0, dto);
+        // 제일 앞에 추가
+        listOps.leftPush(key, dto);
+        Long size = listOps.size(key);
+        // 6개 초과시 잘라냄
+        if (size != null && size > MAX_RECENT_VIEW_HOUSE) {
+            listOps.rightPop(key);
+        }
+        log.info("최근 본 아파트 추가: {}", dto);
+    }
+
+    @Override
+    public List<RecentViewHouseResponseDto> getRecentViewHouseList(String memberUuid) {
+        String key = "recent:view:house:" + memberUuid;
+        ListOperations<String, RecentViewHouseResponseDto> listOps = recentViewHouseRedisTemplate.opsForList();
+
+        List<RecentViewHouseResponseDto> result = listOps.range(key, 0, MAX_RECENT_VIEW_HOUSE);
+
+        if (result != null && !result.isEmpty()) {
+            result.forEach(dto -> log.info("최근 본 아파트: {}", dto));
+            return result;
+        } else {
+            return null; // 빈 리스트 반환
+        }
     }
 
 }

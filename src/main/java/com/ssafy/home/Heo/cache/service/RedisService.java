@@ -3,6 +3,7 @@ package com.ssafy.home.Heo.cache.service;
 
 
 import com.ssafy.home.Heo.cache.dto.out.RecentSearchResponseDto;
+import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.SearchWordDetailResponseDto;
 
 import java.util.Date;
@@ -24,5 +25,15 @@ public interface RedisService {
 
     // 회원의 전체 최근 검색어 삭제
     void deleteUserSearchKey(String memberUuid);
+
+
+    /**
+     * 최근 본 아파트
+     */
+    // 최근 본 아파트 리스트 (최대 6개)
+    List<RecentViewHouseResponseDto> getRecentViewHouseList(String memberUuid);
+    // 최근 본 아파트에 추가
+    void addRecentViewHouse(String memberUuid, RecentViewHouseResponseDto dto);
+
 
 }
