@@ -90,6 +90,7 @@ public class SecurityConfig {
 //                        "/api/v1/reviews/{reviewId}"
 //                        ).authenticated()
                 // 모든 사용자 접근 가능
+                .requestMatchers("/api/v1/cache/**").authenticated()                   
                 .requestMatchers("/login",
                         "/",
                         "/api/v1/**",
