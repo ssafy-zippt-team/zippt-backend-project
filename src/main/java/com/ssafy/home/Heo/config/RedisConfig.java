@@ -1,6 +1,7 @@
 package com.ssafy.home.Heo.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.house.dto.out.LookAroundCacheDto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
@@ -79,7 +80,27 @@ public class RedisConfig  {
         objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 등 대응
 
         Jackson2JsonRedisSerializer<LookAroundCacheDto> serializer =
-                new Jackson2JsonRedisSerializer<>(objectMapper, LookAroundCacheDto.class);
+                new Jackson2JsonRedisSerializer<>(LookAroundCacheDto.class);
+        template.setValueSerializer(serializer);
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, RecentViewHouseResponseDto> recentViewHouseRedisTemplate() {
+        RedisTemplate<String, RecentViewHouseResponseDto> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+
+        // Key Serializer 설정
+        template.setKeySerializer(new StringRedisSerializer());
+
+        // Value Serializer 설정
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 등 대응
+
+        Jackson2JsonRedisSerializer<RecentViewHouseResponseDto> serializer =
+                new Jackson2JsonRedisSerializer<>(RecentViewHouseResponseDto.class);
         template.setValueSerializer(serializer);
 
         template.afterPropertiesSet();
