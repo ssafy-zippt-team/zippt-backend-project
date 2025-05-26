@@ -2,6 +2,7 @@ package com.ssafy.home.Heo.cache.service;
 
 
 
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestDto;
 import com.ssafy.home.Heo.cache.dto.out.RecentSearchResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.SearchWordDetailResponseDto;
@@ -33,7 +34,7 @@ public interface RedisService {
     // 최근 본 아파트 리스트 (최대 6개)
     List<RecentViewHouseResponseDto> getRecentViewHouseList(String memberUuid);
     // 최근 본 아파트에 추가
-    void addRecentViewHouse(String memberUuid, RecentViewHouseResponseDto dto);
+    void addRecentViewHouse(String memberUuid, RecentViewHouseRequestDto dto);
 
 
 }

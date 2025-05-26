@@ -1,6 +1,8 @@
 package com.ssafy.home.Heo.cache.dto.out;
 
 
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestDto;
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestVo;
 import com.ssafy.home.Heo.cache.vo.out.RecentSearchResponseVo;
 import com.ssafy.home.Heo.cache.vo.out.RecentViewHouseResponseVo;
 import com.ssafy.home.Heo.cache.vo.out.SearchWordDetailResponseVo;
@@ -23,25 +25,26 @@ public class RecentViewHouseResponseDto {
     private String jibun; // 지번
     private String roadNm; // 도로명
     private int buildYear; // 준공년도
-
+    private String imgUrl;
     private float amountAvg; // 평균 거래가
     private float amountMax; // 최대 거래가
     private float amountMin; // 최저 거래가
 
     // VO → DTO 변환
-    public static RecentViewHouseResponseDto from(RecentViewHouseResponseVo vo) {
+    public static RecentViewHouseResponseDto from(RecentViewHouseResponseVo outVo) {
         return RecentViewHouseResponseDto.builder()
-                .aptSeq(vo.getAptSeq())
-                .umdNm(vo.getUmdNm())
-                .aptNm(vo.getAptNm())
-                .latitude(vo.getLatitude())
-                .longitude(vo.getLongitude())
-                .jibun(vo.getJibun())
-                .roadNm(vo.getRoadNm())
-                .buildYear(vo.getBuildYear())
-                .amountAvg(vo.getAmountAvg())
-                .amountMax(vo.getAmountMax())
-                .amountMin(vo.getAmountMin())
+                .aptSeq(outVo.getAptSeq())
+                .umdNm(outVo.getUmdNm())
+                .aptNm(outVo.getAptNm())
+                .latitude(outVo.getLatitude())
+                .longitude(outVo.getLongitude())
+                .imgUrl(outVo.getImgUrl())
+                .jibun(outVo.getJibun())
+                .roadNm(outVo.getRoadNm())
+                .buildYear(outVo.getBuildYear())
+                .amountAvg(outVo.getAmountAvg())
+                .amountMax(outVo.getAmountMax())
+                .amountMin(outVo.getAmountMin())
                 .build();
     }
 
@@ -54,11 +57,30 @@ public class RecentViewHouseResponseDto {
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .jibun(dto.getJibun())
+                .imgUrl(dto.getImgUrl())
                 .roadNm(dto.getRoadNm())
                 .buildYear(dto.getBuildYear())
                 .amountAvg(dto.getAmountAvg())
                 .amountMax(dto.getAmountMax())
                 .amountMin(dto.getAmountMin())
+                .build();
+    }
+
+    // in VO → OUT 변환
+    public static RecentViewHouseRequestDto from(RecentViewHouseRequestVo inVo) {
+        return RecentViewHouseRequestDto.builder()
+                .aptSeq(inVo.getAptSeq())
+                .umdNm(inVo.getUmdNm())
+                .aptNm(inVo.getAptNm())
+                .latitude(inVo.getLatitude())
+                .longitude(inVo.getLongitude())
+                .jibun(inVo.getJibun())
+                .imgUrl(inVo.getImgUrl())
+                .roadNm(inVo.getRoadNm())
+                .buildYear(inVo.getBuildYear())
+                .amountAvg(inVo.getAmountAvg())
+                .amountMax(inVo.getAmountMax())
+                .amountMin(inVo.getAmountMin())
                 .build();
     }
 }
