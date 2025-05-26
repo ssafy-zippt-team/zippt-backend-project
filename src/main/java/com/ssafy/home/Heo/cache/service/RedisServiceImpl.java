@@ -1,6 +1,7 @@
 package com.ssafy.home.Heo.cache.service;
 
 
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestDto;
 import com.ssafy.home.Heo.cache.dto.out.RecentSearchResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.cache.dto.out.SearchWordDetailResponseDto;
@@ -86,13 +87,27 @@ public class RedisServiceImpl implements  RedisService{
 
     // 최근 본 아파트 추가 (중복 제거, 6개 제한)
     @Override
-    public void addRecentViewHouse(String memberUuid, RecentViewHouseResponseDto dto) {
+    public void addRecentViewHouse(String memberUuid, RecentViewHouseRequestDto dto) {
         String key = "recent:view:house:" + memberUuid;
         ListOperations<String, RecentViewHouseResponseDto> listOps = recentViewHouseRedisTemplate.opsForList();
         // 기존 동일 아파트 제거(중복 방지)
         listOps.remove(key, 0, dto);
         // 제일 앞에 추가
-        listOps.leftPush(key, dto);
+        listOps.leftPush(key, RecentViewHouseResponseDto.builder()
+                        .aptSeq(dto.getAptSeq())
+                        .umdNm(dto.getUmdNm())
+                        .aptNm(dto.getAptNm())
+                        .latitude(dto.getLatitude())
+                        .longitude(dto.getLongitude())
+                        .jibun(dto.getJibun())
+                        .roadNm(dto.getRoadNm())
+                        .buildYear(dto.getBuildYear())
+                        .imgUrl(dto.getImgUrl())
+                        .amountAvg(dto.getAmountAvg())
+                        .amountMax(dto.getAmountMax())
+                        .amountMin(dto.getAmountMin())
+                        .build()
+        );
         Long size = listOps.size(key);
         // 6개 초과시 잘라냄
         if (size != null && size > MAX_RECENT_VIEW_HOUSE) {

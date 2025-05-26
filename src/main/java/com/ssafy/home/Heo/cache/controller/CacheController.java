@@ -1,5 +1,7 @@
 package com.ssafy.home.Heo.cache.controller;
 
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestDto;
+import com.ssafy.home.Heo.cache.dto.in.RecentViewHouseRequestVo;
 import com.ssafy.home.Heo.cache.dto.out.RecentViewHouseResponseDto;
 import com.ssafy.home.Heo.cache.service.RedisService;
 import com.ssafy.home.Heo.cache.vo.out.RecentSearchResponseVo;
@@ -70,7 +72,7 @@ public class CacheController {
     @Operation(summary = "최근 본 아파트 추가", description = "회원의 최근 본 아파트 추가")
     @PostMapping("/recent-view-houses")
     public BaseResponse<Void> addRecentViewHouse(
-            @RequestBody RecentViewHouseResponseVo vo,
+            @RequestBody RecentViewHouseRequestVo vo,
             @AuthenticationPrincipal  CustomUserDetails user
     ) {
         // memberUuid 추출
