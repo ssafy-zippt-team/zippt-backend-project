@@ -5,6 +5,8 @@ import com.ssafy.home.Heo.bookmark.entity.BookmarkEntity;
 import com.ssafy.home.Heo.bookmark.service.BookmarkService;
 import com.ssafy.home.Heo.bookmark.vo.in.BookmarkSaveVo;
 import com.ssafy.home.Heo.common.base.BaseResponse;
+import com.ssafy.home.Heo.common.page.PageRequestDto;
+import com.ssafy.home.Heo.common.page.PageResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +29,11 @@ public class BookMarkController {
     ==============================================================*/
     @Operation(summary = "즐겨찾기 조회", description = "즐겨찾기 조회", tags = {"즐겨찾기"})
     @GetMapping("/list/{memberUuid}")
-    public BaseResponse<List<BookmarkResponseDto>> list(
+    public PageResponseDto<BookmarkResponseDto> list(
             @Parameter(description = "memberUuid", example = "63f912c8-2b04-11f0-a5b7-0242ac110002")
-            @PathVariable(name = "memberUuid")String memberuuid) throws SQLException {
-        List<BookmarkResponseDto> list = service.getBookmarkList(memberuuid);
-        return BaseResponse.of(list);
+            @PathVariable(name = "memberUuid")String memberuuid,
+            @ParameterObject PageRequestDto pageRequestDto) throws SQLException {
+        return service.getBookmarkList(pageRequestDto,memberuuid);
     }
     /*==============================================================
         즐겨찾기 전체 조회 END

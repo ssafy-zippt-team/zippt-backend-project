@@ -15,7 +15,12 @@ import java.util.List;
 public interface BookmarkDao {
 
     // 즐겨찾기 조회
-    List<BookmarkResponseDto> getBookmarkList(String memberUuid) throws SQLException;
+    List<BookmarkResponseDto> getBookmarkList(@Param("pageRequestDto") PageRequestDto pageRequestDto,
+                                              @Param("memberUuid") String memberUuid) throws SQLException;
+
+    // 즐겨찾기조회 카운트
+    int getBookmarkListCnt(@Param("memberUuid") String memberUuid) throws SQLException;
+
     // 즐겨찾기 등록
     void insert(@Param("memberUuid") String memberUuid,
                 @Param("aptSeq") String aptSeq) throws SQLException;

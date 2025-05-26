@@ -6,6 +6,11 @@ import lombok.Getter;
 @Getter
 @Builder
 public class HouseDetailResponseVo {
+    private String umdNm;
+    private String aptNm;
+    private String imgUrl;
+    private float latitude; // 위도
+    private float longitude; // 경도
     private String jibun; // 지번
     private String roadNm; // 도로명
     private String roadNmBonbun; // 도로명기초번호
