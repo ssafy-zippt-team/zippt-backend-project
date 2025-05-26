@@ -8,7 +8,7 @@
 		전체 조회
 	-->
 	<select id="getBookmarkList"
-			parameterType="String"
+			parameterType="map"
 			resultType="com.ssafy.home.Heo.bookmark.dto.out.BookmarkResponseDto">
 		select
 		 	  A.bookmark_id   AS bookmarkId
@@ -24,8 +24,21 @@
 		WHERE A.member_uuid = #{memberUuid}
 		AND   A.active_flag = 'Y'
 		ORDER BY A.updated_at DESC
-
+		LIMIT #{pageRequestDto.size} OFFSET #{pageRequestDto.offset}
 	</select>
+
+	<!--
+		아파트별 북마크 횟수 조회
+	-->
+	<select id="getBookmarkListCnt"
+			parameterType="String"
+			resultType="Integer">
+		select count(*)
+		FROM  bookmarks AS A
+		WHERE A.member_uuid = #{memberUuid}
+		AND   A.active_flag = 'Y'
+	</select>
+
 	<!--
 		아파트별 북마크 횟수 조회
 	-->

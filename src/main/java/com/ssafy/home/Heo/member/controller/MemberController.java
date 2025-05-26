@@ -40,7 +40,7 @@ public class MemberController {
        mypage 수정
     ==============================================================*/
     @Operation(summary = "mypage 정보수정", description = "mypage 정보수정", tags = {"마이페이지"})
-    @GetMapping("/memberupdate")
+    @PatchMapping("/memberupdate")
     public BaseResponse<String> memberupdate(
             @ParameterObject MemberRequestDto requestDto) throws SQLException {
         service.memberUpdate(requestDto);
