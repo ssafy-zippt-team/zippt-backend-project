@@ -49,4 +49,10 @@
         INSERT INTO member (member_uuid, name, membername, password, email, phone_number, role)
         VALUES (UUID(), #{nickname}, #{username}, #{password}, #{userEmail}, #{phoneNumber}, "ROLE_USER")
     </insert>
+
+    <select id="findPasswordByUuid" parameterType="String" resultType="String">
+        SELECT password
+        FROM member
+        WHERE member_uuid = #{uuid}
+    </select>
 </mapper>

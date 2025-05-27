@@ -14,4 +14,6 @@ public interface UserDao {
     UserEntity findByUserEmail(String userEmail);
 
     void registUser(UserEntity userEntity);
+
+    String findPasswordByUuid(String uuid);
 }
